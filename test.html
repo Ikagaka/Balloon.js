@@ -1,0 +1,29 @@
+<script src="./node_modules/ikagaka.nar.js/vender/encoding.js"></script>
+<script src="./node_modules/ikagaka.nar.js/vender/jszip.min.js"></script>
+<script src="./node_modules/ikagaka.nar.js/vender/XHRProxy.min.js"></script>
+<script src="./node_modules/ikagaka.nar.js/vender/WMDescript.js"></script>
+<script src="./node_modules/ikagaka.nar.js/Nar.js"></script>
+<script src="./node_modules/ikagaka.shell.js/vender/zepto.min.js"></script>
+<script src="./node_modules/ikagaka.shell.js/SurfaceUtil.js"></script>
+<script src="./Balloon.js"></script>
+<script>
+var nar = new Nar()
+nar.loadFromURL("./vender/origin.nar", function(err){
+  if(!!err) return console.error(err.stack);
+  console.log(nar);
+
+  if(nar.install.type === "balloon"){
+    var balloon = new Balloon(nar.tree);
+  }else{
+    throw new Error("wrong nar file")
+  }
+
+  console.log(balloon);
+
+  if(balloon != null){
+    $(balloon.element).appendTo("body");
+  }
+
+});
+
+</script>
