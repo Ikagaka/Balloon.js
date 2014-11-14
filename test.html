@@ -1,4 +1,4 @@
-<script src="./node_modules/ikagaka.nar.js/vender/encoding.js"></script>
+<script src="./node_modules/ikagaka.nar.js/node_modules/encoding-japanese/encoding.js"></script>
 <script src="./node_modules/ikagaka.nar.js/vender/jszip.min.js"></script>
 <script src="./node_modules/ikagaka.nar.js/vender/XHRProxy.min.js"></script>
 <script src="./node_modules/ikagaka.nar.js/vender/WMDescript.js"></script>
@@ -6,24 +6,39 @@
 <script src="./node_modules/ikagaka.shell.js/vender/zepto.min.js"></script>
 <script src="./node_modules/ikagaka.shell.js/SurfaceUtil.js"></script>
 <script src="./Balloon.js"></script>
+<script src="./BalloonSurface.js"></script>
+<p>scope: <input type="number" id="scope" value="0" /></p>
+<p>surface: <input type="number" id="surface" value="0" /></p>
+
 <script>
 var nar = new Nar()
 nar.loadFromURL("./vender/origin.nar", function(err){
   if(!!err) return console.error(err.stack);
+
   console.log(nar);
 
   if(nar.install.type === "balloon"){
-    var balloon = new Balloon(nar.tree);
+    var balloon = new Balloon(nar.directory);
   }else{
     throw new Error("wrong nar file")
   }
-
-  console.log(balloon);
-
-  if(balloon != null){
-    $(balloon.element).appendTo("body");
-  }
-
+  balloon.load(function(err){
+    console.log(balloon);
+    $("body").change(function(ev){
+      changeBalloonSurface(Number($("#scope").val()), Number($("#surface").val()))
+    });
+    var balloonSurface;
+    changeBalloonSurface(0, 0)
+    function changeBalloonSurface(a, b){
+      if(balloonSurface != null){
+        $(balloonSurface.element).remove()
+      }
+      balloonSurface = balloon.getSurface(a, b);
+      console.log(balloonSurface)
+      if(balloonSurface != null){
+        $(balloonSurface.element).appendTo("body");
+      }
+    }
+  });
 });
-
 </script>
