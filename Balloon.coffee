@@ -30,7 +30,7 @@ class Balloon
   attachSurface: (canvas, scopeId, surfaceId)->
     type = if scopeId is 0 then "sakura" else "kero"
     if !!@balloons[type][surfaceId]
-    then new BalloonSurface(canvas, scopeId, surfaceId, @balloons)
+    then new BalloonSurface(canvas, scopeId, @balloons[type][surfaceId], @balloons)
     else null
 
 

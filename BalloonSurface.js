@@ -6,11 +6,12 @@ BalloonSurface = (function() {
 
   SurfaceUtil = window["SurfaceUtil"];
 
-  function BalloonSurface(element, scopeId, surfaceId, balloons) {
+  function BalloonSurface(element, scopeId, balloonConf, balloons) {
     this.element = element;
     this.scopeId = scopeId;
-    this.surfaceId = surfaceId;
     this.balloons = balloons;
+    this.descript = balloonConf.descript;
+    this.baseCanvas = balloonConf.canvas;
     $(this.element).on("click", (function(_this) {
       return function(ev) {
         return $(_this.element).trigger($.Event('IkagakaBalloonEvent', {
@@ -33,7 +34,7 @@ BalloonSurface = (function() {
     var type, util;
     type = this.scopeId === 0 ? "sakura" : "kero";
     util = new SurfaceUtil(this.element);
-    util.init(this.balloons[type][this.surfaceId].canvas);
+    util.init(this.baseCanvas);
     return void 0;
   };
 

@@ -4,7 +4,9 @@ class BalloonSurface
 
   SurfaceUtil = window["SurfaceUtil"]
 
-  constructor: (@element, @scopeId, @surfaceId, @balloons)->
+  constructor: (@element, @scopeId, balloonConf, @balloons)->
+    @descript = balloonConf.descript
+    @baseCanvas = balloonConf.canvas
     $(@element).on "click", (ev)=>
       $(@element).trigger(
         $.Event('IkagakaBalloonEvent', {
@@ -22,5 +24,5 @@ class BalloonSurface
   render: ->
     type = if @scopeId is 0 then "sakura" else "kero"
     util = new SurfaceUtil(@element)
-    util.init(@balloons[type][@surfaceId].canvas)
+    util.init(@baseCanvas)
     undefined

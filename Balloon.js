@@ -46,7 +46,7 @@ Balloon = (function() {
     var type;
     type = scopeId === 0 ? "sakura" : "kero";
     if (!!this.balloons[type][surfaceId]) {
-      return new BalloonSurface(canvas, scopeId, surfaceId, this.balloons);
+      return new BalloonSurface(canvas, scopeId, this.balloons[type][surfaceId], this.balloons);
     } else {
       return null;
     }
