@@ -32,10 +32,6 @@ nar.loadFromURL("./vender/origin.nar", function(err){
 
     var balloonSurface = balloon.attachSurface($("#balloonSurface")[0], 0, 0);
 
-    $("#balloonSurface").on("IkagakaBalloonEvent", function(ev){
-      console.log(ev.detail);
-    });
-
     console.log(balloonSurface);
 
   });

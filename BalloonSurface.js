@@ -12,16 +12,6 @@ BalloonSurface = (function() {
     this.balloons = balloons;
     this.descript = balloonConf.descript;
     this.baseCanvas = balloonConf.canvas;
-    $(this.element).on("click", (function(_this) {
-      return function(ev) {
-        return $(_this.element).trigger($.Event('IkagakaBalloonEvent', {
-          detail: {
-            ID: "OnBallonClick"
-          },
-          bubbles: true
-        }));
-      };
-    })(this));
     this.render();
   }
 

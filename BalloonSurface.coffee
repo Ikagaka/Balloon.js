@@ -7,14 +7,6 @@ class BalloonSurface
   constructor: (@element, @scopeId, balloonConf, @balloons)->
     @descript = balloonConf.descript
     @baseCanvas = balloonConf.canvas
-    $(@element).on "click", (ev)=>
-      $(@element).trigger(
-        $.Event('IkagakaBalloonEvent', {
-          detail:{
-            ID: "OnBallonClick"
-          },
-          bubbles: true
-        }))
     @render()
 
   destructor: ->
