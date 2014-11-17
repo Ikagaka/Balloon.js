@@ -2,72 +2,41 @@
 var BalloonSurface;
 
 BalloonSurface = (function() {
-  function BalloonSurface(scopeId, surfaceId, balloons) {
-    var type;
+  var SurfaceUtil;
+
+  SurfaceUtil = window["SurfaceUtil"];
+
+  function BalloonSurface(element, scopeId, surfaceId, balloons) {
+    this.element = element;
     this.scopeId = scopeId;
     this.surfaceId = surfaceId;
     this.balloons = balloons;
-    type = this.scopeId === 0 ? "sakura" : "kero";
-    this.element = this.balloons[type][this.surfaceId].canvas;
+    $(this.element).on("click", (function(_this) {
+      return function(ev) {
+        return $(_this.element).trigger($.Event('IkagakaBalloonEvent', {
+          detail: {
+            ID: "OnBallonClick"
+          },
+          bubbles: true
+        }));
+      };
+    })(this));
+    this.render();
   }
 
-  BalloonSurface.prototype.destructor = function() {};
+  BalloonSurface.prototype.destructor = function() {
+    $(this.element).off();
+    return void 0;
+  };
 
-  BalloonSurface.prototype.playAnimation = function() {};
-
-  BalloonSurface.prototype.stopAnimation = function() {};
+  BalloonSurface.prototype.render = function() {
+    var type, util;
+    type = this.scopeId === 0 ? "sakura" : "kero";
+    util = new SurfaceUtil(this.element);
+    util.init(this.balloons[type][this.surfaceId].canvas);
+    return void 0;
+  };
 
   return BalloonSurface;
 
 })();
-
-
-/*
-class Balloon
-  constructor: (tree)->
-    @$balloon = $("<div />")
-      .addClass("box")
-    @$style = $("<style scoped />")
-      .html("""
-        .box {
-          position: absolute;
-          top: -150px;
-          left: 0px;
-          height: 150px;
-          width: 280px;
-          background: #ccc;
-          overflow-y: scroll;
-          white-space: pre;
-          white-space: pre-wrap;
-          white-space: pre-line;
-          word-wrap: break-word;
-        }
-        .text {
-          padding: 1em;
-        }
-        .anchor,
-        .select {
-          color:red;
-          cursor:pointer;
-        }
-        .anchor:hover,
-        .select:hover {
-          background-color:violet;
-        }
-      """)
-    @$text = $("<div />")
-      .addClass("text")
-    @$balloon
-      .append(@$style)
-      .append(@$text)
-    @element = @$balloon[0]
-  talk: (text)->
-    @$text.html(@$text.html() + text)
-    undefined
-  clear: ->
-    @$text.html("")
-    undefined
-  br: ->
-    @talk("<br />")
-    undefined
- */

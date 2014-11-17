@@ -3,13 +3,15 @@
 <script src="./node_modules/ikagaka.nar.js/vender/XHRProxy.min.js"></script>
 <script src="./node_modules/ikagaka.nar.js/vender/WMDescript.js"></script>
 <script src="./node_modules/ikagaka.nar.js/Nar.js"></script>
-<script src="./node_modules/ikagaka.shell.js/vender/zepto.min.js"></script>
+<script src="./node_modules/ikagaka.shell.js/node_modules/surfaces_txt2yaml/lib/surfaces_txt2yaml.js"></script>
+<script src="./node_modules/ikagaka.shell.js/node_modules/underscore/underscore-min.js"></script>
+<script src="./node_modules/ikagaka.shell.js/node_modules/zepto/zepto.min.js"></script>
 <script src="./node_modules/ikagaka.shell.js/SurfaceUtil.js"></script>
+<script src="./node_modules/ikagaka.shell.js/Surface.js"></script>
+<script src="./node_modules/ikagaka.shell.js/Shell.js"></script>
 <script src="./Balloon.js"></script>
 <script src="./BalloonSurface.js"></script>
-<p>scope: <input type="number" id="scope" value="0" /></p>
-<p>surface: <input type="number" id="surface" value="0" /></p>
-
+<canvas id="balloonSurface"></canvas>
 <script>
 var nar = new Nar()
 nar.loadFromURL("./vender/origin.nar", function(err){
@@ -17,28 +19,25 @@ nar.loadFromURL("./vender/origin.nar", function(err){
 
   console.log(nar);
 
-  if(nar.install.type === "balloon"){
+  if(nar.install["type"] === "balloon"){
     var balloon = new Balloon(nar.directory);
   }else{
     throw new Error("wrong nar file")
   }
+
   balloon.load(function(err){
+    if(!!err) return console.error(err.stack);
+
     console.log(balloon);
-    $("body").change(function(ev){
-      changeBalloonSurface(Number($("#scope").val()), Number($("#surface").val()))
+
+    var balloonSurface = balloon.attachSurface($("#balloonSurface")[0], 0, 0);
+
+    $("#balloonSurface").on("IkagakaBalloonEvent", function(ev){
+      console.log(ev.detail);
     });
-    var balloonSurface;
-    changeBalloonSurface(0, 0)
-    function changeBalloonSurface(a, b){
-      if(balloonSurface != null){
-        $(balloonSurface.element).remove()
-      }
-      balloonSurface = balloon.getSurface(a, b);
-      console.log(balloonSurface)
-      if(balloonSurface != null){
-        $(balloonSurface.element).appendTo("body");
-      }
-    }
+
+    console.log(balloonSurface);
+
   });
 });
 </script>

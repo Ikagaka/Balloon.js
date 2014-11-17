@@ -1,11 +1,8 @@
 
 declare class BalloonSurface {
-  constructor(scopeId: number, surfaceId: number, balloons: Balloons); // stable
+  constructor(canvas: HTMLCanvasElement, scopeId: number, surfaceId: number, balloons: Balloons); // stable
   destructor(): void; // stable
-  element: HTMLCanvasElement; // stable
   render(): void; // stable
-  playAnimation(): void; // unstable
-  stopAnimation(): void; // unstable
 }
 
 

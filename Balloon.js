@@ -42,11 +42,11 @@ Balloon = (function() {
     })(this));
   };
 
-  Balloon.prototype.getSurface = function(scopeId, surfaceId) {
+  Balloon.prototype.attachSurface = function(canvas, scopeId, surfaceId) {
     var type;
     type = scopeId === 0 ? "sakura" : "kero";
     if (!!this.balloons[type][surfaceId]) {
-      return new BalloonSurface(scopeId, surfaceId, this.balloons);
+      return new BalloonSurface(canvas, scopeId, surfaceId, this.balloons);
     } else {
       return null;
     }

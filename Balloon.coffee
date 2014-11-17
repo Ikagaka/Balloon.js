@@ -27,10 +27,10 @@ class Balloon
       Balloon.loadBalloonDescripts(@directory, @balloons, @descript)
       callback(err)
 
-  getSurface: (scopeId, surfaceId)->
+  attachSurface: (canvas, scopeId, surfaceId)->
     type = if scopeId is 0 then "sakura" else "kero"
     if !!@balloons[type][surfaceId]
-    then new BalloonSurface(scopeId, surfaceId, @balloons)
+    then new BalloonSurface(canvas, scopeId, surfaceId, @balloons)
     else null
 
 

@@ -1,5 +1,3 @@
-interface JSZipDirectory { [filepath: string]: JSZipObject; };
-interface Descript { [key: string]: string; };
 interface Balloons {
   sakura: {descript: Descript; canvas: HTMLCanvasElement; }[];
   kero: {descript: Descript; canvas: HTMLCanvasElement; }[];
@@ -14,7 +12,7 @@ interface Balloons {
 declare class Balloon {
   constructor(directory: JSZipDirectory); // stable
   load(callback:(error: any) => void): void; // stable
-  getSurface(scopeId: number, surfaceId: number): Blimp; // unstable
+  attachSurface(canvas: HTMLCanvasElement, scopeId: number, surfaceId: number): BalloonSurface; // unstable
   descript: Descript; // stable
   directory: JSZipDirectory; // stable
   balloons: Balloons; // stable
