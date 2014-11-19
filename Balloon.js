@@ -2,13 +2,11 @@
 var Balloon;
 
 Balloon = (function() {
-  var $, Nar, Shell, SurfaceUtil, URL;
+  var $, Nar, SurfaceUtil, URL;
 
-  $ = window["Zepto"];
+  $ = window["jQuery"];
 
   Nar = window["Nar"];
-
-  Shell = window["Shell"];
 
   SurfaceUtil = window["SurfaceUtil"];
 

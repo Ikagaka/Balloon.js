@@ -2,9 +2,8 @@
 
 class Balloon
 
-  $ = window["Zepto"]
+  $ = window["jQuery"]
   Nar = window["Nar"]
-  Shell = window["Shell"]
   SurfaceUtil = window["SurfaceUtil"]
   URL = window["URL"]
 

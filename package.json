@@ -1,18 +1,23 @@
 {
-  "name":           "ikagaka.balloon.js",
-  "version":        "1.1.1",
-  "description":    "balloon manager",
-  "url":            "https://github.com/ikagaka/Balloon.js",
-  "keywords":       ["nar", "ikagaka", "unstable", "ukagaka"],
+  "name": "ikagaka.balloon.js",
+  "version": "1.2.0",
+  "description": "balloon surface renderer",
+  "url": "https://github.com/ikagaka/Balloon.js",
+  "keywords": [
+    "nar",
+    "ikagaka",
+    "unstable",
+    "ukagaka"
+  ],
   "repository": {
-    "type":         "git",
-    "url":          "https://github.com/ikagaka/Balloon.js"
+    "type": "git",
+    "url": "https://github.com/ikagaka/Balloon.js"
   },
   "dependencies": {
     "ikagaka.nar.js": "",
-    "ikagaka.shell.js": ""
+    "ikagaka.shell.js": "",
+    "jquery": ""
   },
-  "devDependencies": {
-  },
-  "license":        "MIT"
+  "devDependencies": {},
+  "license": "MIT"
 }
