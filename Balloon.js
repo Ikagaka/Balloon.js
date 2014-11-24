@@ -6,9 +6,9 @@ Balloon = (function() {
 
   $ = window["jQuery"];
 
-  Nar = window["Nar"] || Ikagaka["Nar"];
+  Nar = window["Nar"] || window["Ikagaka"]["Nar"] || require("ikagaka.nar.js");
 
-  SurfaceUtil = window["SurfaceUtil"] || Ikagaka["SurfaceUtil"];
+  SurfaceUtil = window["SurfaceUtil"] || window["Ikagaka"]["SurfaceUtil"];
 
   URL = window["URL"];
 

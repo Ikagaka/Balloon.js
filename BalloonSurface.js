@@ -4,7 +4,7 @@ var BalloonSurface;
 BalloonSurface = (function() {
   var SurfaceUtil;
 
-  SurfaceUtil = window["SurfaceUtil"] || Ikagaka["SurfaceUtil"];
+  SurfaceUtil = window["SurfaceUtil"] || window["Ikagaka"]["SurfaceUtil"];
 
   function BalloonSurface(element, scopeId, balloonConf, balloons) {
     this.element = element;

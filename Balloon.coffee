@@ -4,8 +4,8 @@ class Balloon
 
   $ = window["jQuery"]
 
-  Nar = window["Nar"]  || Ikagaka["Nar"]
-  SurfaceUtil = window["SurfaceUtil"] || Ikagaka["SurfaceUtil"]
+  Nar         = window["Nar"]         || window["Ikagaka"]["Nar"]         || require("ikagaka.nar.js")
+  SurfaceUtil = window["SurfaceUtil"] || window["Ikagaka"]["SurfaceUtil"]#|| require("ikagaka.surfaceutil.js")
 
   URL = window["URL"]
 
