@@ -20,7 +20,7 @@ class BalloonSurface
     undefined
 
 if module?.exports?
-  module.exports = Balloon
+  module.exports = BalloonSurface
 
 if window["Ikagaka"]?
-  window["Ikagaka"]["Balloon"] = Balloon
+  window["Ikagaka"]["BalloonSurface"] = BalloonSurface

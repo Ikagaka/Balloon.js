@@ -33,9 +33,9 @@ BalloonSurface = (function() {
 })();
 
 if ((typeof module !== "undefined" && module !== null ? module.exports : void 0) != null) {
-  module.exports = Balloon;
+  module.exports = BalloonSurface;
 }
 
 if (window["Ikagaka"] != null) {
-  window["Ikagaka"]["Balloon"] = Balloon;
+  window["Ikagaka"]["BalloonSurface"] = BalloonSurface;
 }
