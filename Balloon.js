@@ -2,13 +2,15 @@
 var Balloon;
 
 Balloon = (function() {
-  var $, Nar, SurfaceUtil, URL;
+  var $, BalloonSurface, Nar, SurfaceUtil, URL;
 
   $ = window["jQuery"];
 
   Nar = window["Nar"] || window["Ikagaka"]["Nar"] || require("ikagaka.nar.js");
 
   SurfaceUtil = window["SurfaceUtil"] || window["Ikagaka"]["SurfaceUtil"];
+
+  BalloonSurface = window["BalloonSurface"] || window["Ikagaka"]["BalloonSurface"] || require("./BalloonSurface.js");
 
   URL = window["URL"];
 
