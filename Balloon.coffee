@@ -3,8 +3,10 @@
 class Balloon
 
   $ = window["jQuery"]
-  Nar = window["Nar"]
-  SurfaceUtil = window["SurfaceUtil"]
+
+  Nar = window["Nar"]  || Ikagaka["Nar"]
+  SurfaceUtil = window["SurfaceUtil"] || Ikagaka["SurfaceUtil"]
+
   URL = window["URL"]
 
   constructor: (directory)->
@@ -76,3 +78,11 @@ class Balloon
       .then(-> callback(null, ))
       .catch((err)-> console.error(err, err.stack); callback(err))
     undefined
+
+
+
+if module?.exports?
+  module.exports = Balloon
+
+if window["Ikagaka"]?
+  window["Ikagaka"]["Balloon"] = Balloon

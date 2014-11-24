@@ -2,7 +2,7 @@
 
 class BalloonSurface
 
-  SurfaceUtil = window["SurfaceUtil"]
+  SurfaceUtil = window["SurfaceUtil"] || Ikagaka["SurfaceUtil"]
 
   constructor: (@element, @scopeId, balloonConf, @balloons)->
     @descript = balloonConf.descript
@@ -18,3 +18,9 @@ class BalloonSurface
     util = new SurfaceUtil(@element)
     util.init(@baseCanvas)
     undefined
+
+if module?.exports?
+  module.exports = Balloon
+
+if window["Ikagaka"]?
+  window["Ikagaka"]["Balloon"] = Balloon

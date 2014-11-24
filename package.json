@@ -1,7 +1,7 @@
 {
   "name": "ikagaka.balloon.js",
-  "version": "1.2.0",
-  "description": "balloon surface renderer",
+  "version": "1.2.1",
+  "description": "Ukagaka Balloon Surface Renderer",
   "url": "https://github.com/ikagaka/Balloon.js",
   "keywords": [
     "nar",
@@ -9,6 +9,10 @@
     "unstable",
     "ukagaka"
   ],
+  "scripts": {
+    "watch": "node node_modules/uupaa.watch.js --verbose --action build ./*.coffee",
+    "build": "coffee -cb ./*.coffee"
+  },
   "repository": {
     "type": "git",
     "url": "https://github.com/ikagaka/Balloon.js"
@@ -18,6 +22,11 @@
     "ikagaka.shell.js": "",
     "jquery": ""
   },
-  "devDependencies": {},
-  "license": "MIT"
+  "devDependencies": {
+    "uupaa.watch.js": ""
+  },
+  "main":           "./Shell.js",
+  "author":         "duxca",
+  "license":        "MIT",
+  "contributors":   []
 }

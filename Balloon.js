@@ -6,9 +6,9 @@ Balloon = (function() {
 
   $ = window["jQuery"];
 
-  Nar = window["Nar"];
+  Nar = window["Nar"] || Ikagaka["Nar"];
 
-  SurfaceUtil = window["SurfaceUtil"];
+  SurfaceUtil = window["SurfaceUtil"] || Ikagaka["SurfaceUtil"];
 
   URL = window["URL"];
 
@@ -138,3 +138,11 @@ Balloon = (function() {
   return Balloon;
 
 })();
+
+if ((typeof module !== "undefined" && module !== null ? module.exports : void 0) != null) {
+  module.exports = Balloon;
+}
+
+if (window["Ikagaka"] != null) {
+  window["Ikagaka"]["Balloon"] = Balloon;
+}
