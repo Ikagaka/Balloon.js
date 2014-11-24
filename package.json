@@ -1,6 +1,6 @@
 {
   "name": "ikagaka.balloon.js",
-  "version": "1.2.1",
+  "version": "1.2.2",
   "description": "Ukagaka Balloon Surface Renderer",
   "url": "https://github.com/ikagaka/Balloon.js",
   "keywords": [
@@ -25,7 +25,7 @@
   "devDependencies": {
     "uupaa.watch.js": ""
   },
-  "main":           "./Shell.js",
+  "main":           "./Balloon.js",
   "author":         "duxca",
   "license":        "MIT",
   "contributors":   []
