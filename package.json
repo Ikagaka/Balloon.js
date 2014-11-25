@@ -25,7 +25,7 @@
   "devDependencies": {
   },
   "main":           "./Balloon.js",
-  "author":         "duxca",
+  "author":         "Ikagaka",
   "license":        "MIT",
-  "contributors":   []
+  "contributors":   ["legokichi", "wiz-stargazer"]
 }
