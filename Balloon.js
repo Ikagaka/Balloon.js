@@ -2,15 +2,15 @@
 var Balloon;
 
 Balloon = (function() {
-  var $, BalloonSurface, Nar, SurfaceUtil, URL;
+  var $, BalloonSurface, Nar, SurfaceUtil, URL, _ref, _ref1, _ref2;
 
-  $ = window["jQuery"];
+  $ = window["Zepto"];
 
-  Nar = window["Nar"] || window["Ikagaka"]["Nar"] || require("ikagaka.nar.js");
+  Nar = window["Nar"] || ((_ref = window["Ikagaka"]) != null ? _ref["Nar"] : void 0) || require("ikagaka.nar.js");
 
-  SurfaceUtil = window["SurfaceUtil"] || window["Ikagaka"]["SurfaceUtil"];
+  SurfaceUtil = window["SurfaceUtil"] || ((_ref1 = window["Ikagaka"]) != null ? _ref1["SurfaceUtil"] : void 0);
 
-  BalloonSurface = window["BalloonSurface"] || window["Ikagaka"]["BalloonSurface"] || require("./BalloonSurface.js");
+  BalloonSurface = window["BalloonSurface"] || ((_ref2 = window["Ikagaka"]) != null ? _ref2["BalloonSurface"] : void 0) || require("./BalloonSurface.js");
 
   URL = window["URL"];
 
@@ -56,10 +56,10 @@ Balloon = (function() {
     Object.keys(directory).filter(function(filepath) {
       return /balloon([sk])(\d+)s\.txt$/.test(filepath);
     }).forEach(function(filepath) {
-      var buffer, n, type, __, _descript, _ref;
+      var buffer, n, type, __, _descript, _ref3;
       buffer = directory[filepath].asArrayBuffer();
       _descript = Nar.parseDescript(Nar.convert(buffer));
-      _ref = /balloon([sk])(\d+)s\.txt$/.exec(filepath), __ = _ref[0], type = _ref[1], n = _ref[2];
+      _ref3 = /balloon([sk])(\d+)s\.txt$/.exec(filepath), __ = _ref3[0], type = _ref3[1], n = _ref3[2];
       switch (type) {
         case "s":
           return balloons["sakura"][Number(n)].descript = $.extend(true, _descript, descript);
@@ -82,13 +82,13 @@ Balloon = (function() {
           type: "image/png"
         }));
         return SurfaceUtil.loadImage(url, function(err, img) {
-          var n, type, __, _ref, _ref1, _ref2;
+          var n, type, __, _ref3, _ref4, _ref5;
           URL.revokeObjectURL(url);
           if (!!err) {
             return reject(err);
           }
           if (/^balloon([ksc])(\d+)\.png$/.test(filepath)) {
-            _ref = /^balloon([ksc])(\d+)\.png$/.exec(filepath), __ = _ref[0], type = _ref[1], n = _ref[2];
+            _ref3 = /^balloon([ksc])(\d+)\.png$/.exec(filepath), __ = _ref3[0], type = _ref3[1], n = _ref3[2];
             switch (type) {
               case "s":
                 balloons["sakura"][Number(n)] = {
@@ -106,12 +106,12 @@ Balloon = (function() {
                 };
             }
           } else if (/^online(\d+)\.png$/.test(filepath)) {
-            _ref1 = /^online(\d+)\.png$/.exec(filepath), __ = _ref1[0], n = _ref1[1];
+            _ref4 = /^online(\d+)\.png$/.exec(filepath), __ = _ref4[0], n = _ref4[1];
             balloons["online"][Number(n)] = {
               canvas: SurfaceUtil.transImage(img)
             };
           } else if (/^arrow(\d+)\.png$/.test(filepath)) {
-            _ref2 = /^arrow(\d+)\.png$/.exec(filepath), __ = _ref2[0], n = _ref2[1];
+            _ref5 = /^arrow(\d+)\.png$/.exec(filepath), __ = _ref5[0], n = _ref5[1];
             balloons["arrow"][Number(n)] = {
               canvas: SurfaceUtil.transImage(img)
             };

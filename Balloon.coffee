@@ -2,11 +2,11 @@
 
 class Balloon
 
-  $ = window["jQuery"]
+  $ = window["Zepto"]
 
-  Nar         = window["Nar"]         || window["Ikagaka"]["Nar"]         || require("ikagaka.nar.js")
-  SurfaceUtil = window["SurfaceUtil"] || window["Ikagaka"]["SurfaceUtil"]#|| require("ikagaka.surfaceutil.js")
-  BalloonSurface = window["BalloonSurface"] || window["Ikagaka"]["BalloonSurface"] || require("./BalloonSurface.js")
+  Nar         = window["Nar"]         || window["Ikagaka"]?["Nar"]         || require("ikagaka.nar.js")
+  SurfaceUtil = window["SurfaceUtil"] || window["Ikagaka"]?["SurfaceUtil"]#|| require("ikagaka.surfaceutil.js")
+  BalloonSurface = window["BalloonSurface"] || window["Ikagaka"]?["BalloonSurface"] || require("./BalloonSurface.js")
 
   URL = window["URL"]
 

@@ -2,9 +2,9 @@
 var BalloonSurface;
 
 BalloonSurface = (function() {
-  var SurfaceUtil;
+  var SurfaceUtil, _ref;
 
-  SurfaceUtil = window["SurfaceUtil"] || window["Ikagaka"]["SurfaceUtil"];
+  SurfaceUtil = window["SurfaceUtil"] || ((_ref = window["Ikagaka"]) != null ? _ref["SurfaceUtil"] : void 0);
 
   function BalloonSurface(element, scopeId, balloonConf, balloons) {
     this.element = element;

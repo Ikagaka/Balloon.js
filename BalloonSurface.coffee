@@ -2,7 +2,7 @@
 
 class BalloonSurface
 
-  SurfaceUtil = window["SurfaceUtil"] || window["Ikagaka"]["SurfaceUtil"] #|| require("ikagaka.surfaceutil.js")
+  SurfaceUtil = window["SurfaceUtil"] || window["Ikagaka"]?["SurfaceUtil"] #|| require("ikagaka.surfaceutil.js")
 
   constructor: (@element, @scopeId, balloonConf, @balloons)->
     @descript = balloonConf.descript
