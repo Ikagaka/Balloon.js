@@ -1,14 +1,12 @@
+$ = window["Zepto"]
 
+Nar            = window["Nar"]            || window["Ikagaka"]?["Nar"]            || require("ikagaka.nar.js")
+SurfaceUtil    = @Shell?.SurfaceUtil      || @Ikagaka?["Shell"]?.SurfaceUtil      || require("ikagaka.shell.js").SurfaceUtil
+BalloonSurface = window["BalloonSurface"] || window["Ikagaka"]?["BalloonSurface"] || require("./BalloonSurface.js")
+
+URL = window["URL"]
 
 class Balloon
-
-  $ = window["Zepto"]
-
-  Nar         = window["Nar"]         || window["Ikagaka"]?["Nar"]         || require("ikagaka.nar.js")
-  SurfaceUtil = window["SurfaceUtil"] || window["Ikagaka"]?["SurfaceUtil"]#|| require("ikagaka.surfaceutil.js")
-  BalloonSurface = window["BalloonSurface"] || window["Ikagaka"]?["BalloonSurface"] || require("./BalloonSurface.js")
-
-  URL = window["URL"]
 
   constructor: (directory)->
     if !directory["descript.txt"] then throw new Error("descript.txt not found")
@@ -27,32 +25,33 @@ class Balloon
   load: (callback)->
     Balloon.loadBalloonSurfaces @directory, @balloons, (err)=>
       Balloon.loadBalloonDescripts(@directory, @balloons, @descript)
+      delete @directory
       callback(err)
+    return
 
   attachSurface: (canvas, scopeId, surfaceId)->
     type = if scopeId is 0 then "sakura" else "kero"
-    if !!@balloons[type][surfaceId]
-    then new BalloonSurface(canvas, scopeId, @balloons[type][surfaceId], @balloons)
-    else null
-
+    if !@balloons[type][surfaceId]? then return null
+    return new BalloonSurface(canvas, scopeId, @balloons[type][surfaceId], @balloons)
 
   @loadBalloonDescripts: (directory, balloons, descript)->
-    Object.keys(directory)
-      .filter((filepath)-> /balloon([sk])(\d+)s\.txt$/.test(filepath))
-      .forEach (filepath)->
-        buffer = directory[filepath].asArrayBuffer()
-        _descript = Nar.parseDescript(Nar.convert(buffer))
-        [__, type, n] = /balloon([sk])(\d+)s\.txt$/.exec(filepath)
-        switch type
-          when "s" then balloons["sakura"][Number(n)].descript = $.extend(true, _descript, descript)
-          when "k" then balloons["kero"][Number(n)].descript = $.extend(true, _descript, descript)
-    undefined
+    keys = Object.keys(directory)
+    hits = keys.filter (filepath)-> /balloon([sk])(\d+)s\.txt$/.test(filepath)
+    hits.forEach (filepath)->
+      buffer = directory[filepath].asArrayBuffer()
+      _descript = Nar.parseDescript(Nar.convert(buffer))
+      [__, type, n] = /balloon([sk])(\d+)s\.txt$/.exec(filepath)
+      switch type
+        when "s" then balloons["sakura"][Number(n)].descript = $.extend(true, _descript, descript)
+        when "k" then balloons["kero"][Number(n)].descript = $.extend(true, _descript, descript)
+    return balloons
 
   @loadBalloonSurfaces: (directory, balloons, callback)->
-    promises = Object.keys(directory)
-      .filter((filepath)-> /[^\/]+\.png$/.test(filepath))
-      .map (filepath)->
-        new Promise (resolve, reject)->
+    keys = Object.keys(directory)
+    hits = keys.filter((filepath)-> /[^\/]+\.png$/.test(filepath))
+    promises = hits.map (filepath)->
+      new Promise (resolve, reject)->
+        setTimeout ->
           buffer = directory[filepath].asArrayBuffer()
           url = URL.createObjectURL(new Blob([buffer], {type: "image/png"}))
           SurfaceUtil.loadImage url, (err, img)->
@@ -78,12 +77,12 @@ class Balloon
     Promise.all(promises)
       .then(-> callback(null, ))
       .catch((err)-> console.error(err, err.stack); callback(err))
-    undefined
-
+    return
 
 
 if module?.exports?
   module.exports = Balloon
-
-if window["Ikagaka"]?
-  window["Ikagaka"]["Balloon"] = Balloon
+else if @Ikagaka?
+  @Ikagaka.Balloon = Balloon
+else
+  @Balloon = Balloon

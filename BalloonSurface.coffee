@@ -1,8 +1,6 @@
-
+SurfaceUtil = @Shell?.SurfaceUtil || @Ikagaka?["Shell"]?.SurfaceUtil || require("ikagaka.shell.js").SurfaceUtil
 
 class BalloonSurface
-
-  SurfaceUtil = window["SurfaceUtil"] || window["Ikagaka"]?["SurfaceUtil"] #|| require("ikagaka.surfaceutil.js")
 
   constructor: (@element, @scopeId, balloonConf, @balloons)->
     @descript = balloonConf.descript
@@ -10,17 +8,17 @@ class BalloonSurface
     @render()
 
   destructor: ->
-    $(@element).off() # g.c.
-    undefined
+    return
 
   render: ->
     type = if @scopeId is 0 then "sakura" else "kero"
     util = new SurfaceUtil(@element)
     util.init(@baseCanvas)
-    undefined
+    return
 
 if module?.exports?
   module.exports = BalloonSurface
-
-if window["Ikagaka"]?
-  window["Ikagaka"]["BalloonSurface"] = BalloonSurface
+else if @Ikagaka?
+  @Ikagaka.BalloonSurface = BalloonSurface
+else
+  @BalloonSurface = BalloonSurface
