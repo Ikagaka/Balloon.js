@@ -14,9 +14,6 @@
 
   Balloon = (function() {
     function Balloon(directory) {
-      if (!directory["descript.txt"]) {
-        throw new Error("descript.txt not found");
-      }
       this.directory = directory;
       this.descript = null;
       this.balloons = {
@@ -67,7 +64,6 @@
 
     Balloon.loadBalloonDescripts = function(directory, descript) {
       return function(balloons) {
-        console.log(directory, descript, balloons);
         return new Promise(function(resolve, reject) {
           var hits, keys;
           keys = Object.keys(directory);

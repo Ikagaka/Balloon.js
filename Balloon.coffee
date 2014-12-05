@@ -9,7 +9,6 @@ URL = window["URL"]
 class Balloon
 
   constructor: (directory)->
-    if !directory["descript.txt"] then throw new Error("descript.txt not found")
     @directory = directory
     @descript = null
     @balloons =
@@ -46,7 +45,6 @@ class Balloon
     return new BalloonSurface(canvas, scopeId, @balloons[type][surfaceId], @balloons)
 
   @loadBalloonDescripts: (directory, descript)-> (balloons)->
-    console.log directory, descript, balloons
     new Promise (resolve, reject)->
       keys = Object.keys(directory)
       hits = keys.filter (filepath)-> /balloon([sk])(\d+)s\.txt$/.test(filepath)
