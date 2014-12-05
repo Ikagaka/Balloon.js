@@ -20,13 +20,17 @@ loader.loadFromURL("../vendor/origin.nar", function(err, nar){
   console.log(nar);
 
   if(nar.install["type"] === "balloon"){
-    var balloon = new Balloon(nar.directory);
+    var dic = nar.directory
+    var balloonDir = Object.keys(dic).reduce(function(_dic, path){
+      _dic[path] = dic[path].asArrayBuffer();
+      return _dic;
+    }, {});
+    var balloon = new Balloon(balloonDir);
   }else{
     throw new Error("wrong nar file")
   }
 
-  balloon.load(function(err){
-    if(!!err) return console.error(err.stack);
+  balloon.load().then(function(){
 
     console.log(balloon);
 

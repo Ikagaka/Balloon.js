@@ -1,5 +1,3 @@
-interface Descript { [key: string]: string; };
-
 interface Balloons {
   sakura:     {descript: Descript; canvas: HTMLCanvasElement; }[];
   kero:       {descript: Descript; canvas: HTMLCanvasElement; }[];
@@ -11,9 +9,9 @@ interface Balloons {
 }
 
 declare class Balloon {
-  constructor(directory: { [filePath: string]: JSZipObject; });
-  load(callback:(error: any) => void): void;
+  constructor(directory: { [filePath: string]: ArrayBuffer; });
+  load(): Promise<null>;
   attachSurface(canvas: HTMLCanvasElement, scopeId: number, surfaceId: number): BalloonSurface;
-  descript: Descript;
+  descript: { [key: string]: string; };
   balloons: Balloons;
 }
