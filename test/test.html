@@ -30,7 +30,7 @@ loader.loadFromURL("../vendor/origin.nar", function(err, nar){
     throw new Error("wrong nar file")
   }
 
-  balloon.load().then(function(){
+  balloon.load().then(function(balloon){
 
     console.log(balloon);
 

@@ -10,7 +10,7 @@ interface Balloons {
 
 declare class Balloon {
   constructor(directory: { [filePath: string]: ArrayBuffer; });
-  load(): Promise<null>;
+  load(): Promise<Balloon>;
   attachSurface(canvas: HTMLCanvasElement, scopeId: number, surfaceId: number): BalloonSurface;
   descript: { [key: string]: string; };
   balloons: Balloons;

@@ -32,6 +32,7 @@ class Balloon
     prm = prm.then (balloons)=>
       @balloons = balloons
       @directory = null
+      return @
     prm = prm.catch (err)->
       console.error err
       err.message && console.error err.message

@@ -41,7 +41,8 @@
       prm = prm.then((function(_this) {
         return function(balloons) {
           _this.balloons = balloons;
-          return _this.directory = null;
+          _this.directory = null;
+          return _this;
         };
       })(this));
       prm = prm["catch"](function(err) {
