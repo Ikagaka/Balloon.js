@@ -1,3 +1,5 @@
+this library was merged into [cuttlebone](https://github.com/Ikagaka/cuttlebone)
+
 # Balloon.js
 
 
