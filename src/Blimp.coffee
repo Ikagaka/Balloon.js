@@ -6,8 +6,12 @@ class Blimp extends EventEmitter2
     super();
 
     @type = if @scopeId is 0 then "sakura" else "kero"
-    @descript = if @balloon[@type]? then @balloon[@type].descript else null
     @isBalloonLeft = true
+    balloonId = @balloonId
+    balloonId++ unless @isBalloonLeft
+    # バルーンごとに固有のdescript
+    @descript = @balloon.balloons[@type]?[balloonId]?.descript || {}
+    SurfaceUtil.extend(@descript, @balloon.descript)
     @destructed = false
     @destructors = []
     @insertPoint = null
@@ -265,25 +269,24 @@ class Blimp extends EventEmitter2
     balloonId = @balloonId
     balloonId++ unless @isBalloonLeft
     baseCanvas = @balloon.balloons[@type][balloonId].canvas;
+    @descript = if @balloon[@type]? then @balloon.balloons[@type]?[balloonId].descript else {}
     rndr = new SurfaceRender(@$blimpCanvas[0])
     rndr.init(baseCanvas)
     # 大きさ調整
     @$blimp.width(@width = @$blimpCanvas[0].width)
     @$blimp.height(@height = @$blimpCanvas[0].height)
     # テキスト領域を計算
-    descript = @balloon.descript
-    t = descript["origin.y"]         or descript["validrect.top"] or "10"
-    r = descript["validrect.right"]  or "10"
-    b = descript["validrect.bottom"] or "10"
-    l = descript["origin.x"]         or descript["validrect.left"] or "10"
+    t = @descript["origin.y"]         or @descript["validrect.top"] or "10"
+    r = @descript["validrect.right"]  or "10"
+    b = @descript["validrect.bottom"] or "10"
+    l = @descript["origin.x"]         or @descript["validrect.left"] or "10"
     w = @$blimpCanvas[0].width
     h = @$blimpCanvas[0].height
-    @$blimpText.css({
-      "top": "#{t}px",
-      "left": "#{l}px",
-      "width": "#{w-(Number(l)+Number(r))}px",
-      "height": "#{h-(Number(t)-Number(b))}px"
-    })
+    @$blimpText.css
+      top: "#{t}px",
+      left: "#{l}px",
+      width: "#{w-(Number(l)+Number(r))}px",
+      height: "#{h-(Number(t)-Number(b))}px"
     return
 
   left: ()->

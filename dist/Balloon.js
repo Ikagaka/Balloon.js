@@ -89,9 +89,9 @@
             ref1 = /balloon([sk])(\d+)s\.txt$/.exec(filepath), __ = ref1[0], type = ref1[1], n = ref1[2];
             switch (type) {
               case "s":
-                return balloons["sakura"][Number(n)].descript = $.extend(true, _descript, descript);
+                return balloons["sakura"][Number(n)].descript = SurfaceUtil.extend(_descript, descript);
               case "k":
-                return balloons["kero"][Number(n)].descript = $.extend(true, _descript, descript);
+                return balloons["kero"][Number(n)].descript = SurfaceUtil.extend(_descript, descript);
             }
           });
           return resolve(_this);
@@ -251,6 +251,7 @@
     extend(Blimp, superClass);
 
     function Blimp(element, scopeId, balloonId1, balloon) {
+      var balloonId, ref1, ref2;
       this.element = element;
       this.scopeId = scopeId;
       this.balloonId = balloonId1;
@@ -269,8 +270,13 @@
       this.anchorBegin = bind(this.anchorBegin, this);
       Blimp.__super__.constructor.call(this);
       this.type = this.scopeId === 0 ? "sakura" : "kero";
-      this.descript = this.balloon[this.type] != null ? this.balloon[this.type].descript : null;
       this.isBalloonLeft = true;
+      balloonId = this.balloonId;
+      if (!this.isBalloonLeft) {
+        balloonId++;
+      }
+      this.descript = ((ref1 = this.balloon.balloons[this.type]) != null ? (ref2 = ref1[balloonId]) != null ? ref2.descript : void 0 : void 0) || {};
+      SurfaceUtil.extend(this.descript, this.balloon.descript);
       this.destructed = false;
       this.destructors = [];
       this.insertPoint = null;
@@ -647,28 +653,28 @@
     };
 
     Blimp.prototype.render = function() {
-      var b, balloonId, baseCanvas, descript, h, l, r, rndr, t, w;
+      var b, balloonId, baseCanvas, h, l, r, ref1, rndr, t, w;
       balloonId = this.balloonId;
       if (!this.isBalloonLeft) {
         balloonId++;
       }
       baseCanvas = this.balloon.balloons[this.type][balloonId].canvas;
+      this.descript = this.balloon[this.type] != null ? (ref1 = this.balloon.balloons[this.type]) != null ? ref1[balloonId].descript : void 0 : {};
       rndr = new SurfaceRender(this.$blimpCanvas[0]);
       rndr.init(baseCanvas);
       this.$blimp.width(this.width = this.$blimpCanvas[0].width);
       this.$blimp.height(this.height = this.$blimpCanvas[0].height);
-      descript = this.balloon.descript;
-      t = descript["origin.y"] || descript["validrect.top"] || "10";
-      r = descript["validrect.right"] || "10";
-      b = descript["validrect.bottom"] || "10";
-      l = descript["origin.x"] || descript["validrect.left"] || "10";
+      t = this.descript["origin.y"] || this.descript["validrect.top"] || "10";
+      r = this.descript["validrect.right"] || "10";
+      b = this.descript["validrect.bottom"] || "10";
+      l = this.descript["origin.x"] || this.descript["validrect.left"] || "10";
       w = this.$blimpCanvas[0].width;
       h = this.$blimpCanvas[0].height;
       this.$blimpText.css({
-        "top": t + "px",
-        "left": l + "px",
-        "width": (w - (Number(l) + Number(r))) + "px",
-        "height": (h - (Number(t) - Number(b))) + "px"
+        top: t + "px",
+        left: l + "px",
+        width: (w - (Number(l) + Number(r))) + "px",
+        height: (h - (Number(t) - Number(b))) + "px"
       });
     };
 

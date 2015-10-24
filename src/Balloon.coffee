@@ -49,8 +49,8 @@ class Balloon extends EventEmitter2
         _descript = SurfaceUtil.parseDescript(SurfaceUtil.convert(buffer))
         [__, type, n] = /balloon([sk])(\d+)s\.txt$/.exec(filepath)
         switch type
-          when "s" then balloons["sakura"][Number(n)].descript=  $.extend(true, _descript, descript)
-          when "k" then balloons["kero"  ][Number(n)].descript = $.extend(true, _descript, descript)
+          when "s" then balloons["sakura"][Number(n)].descript=  SurfaceUtil.extend(_descript, descript)
+          when "k" then balloons["kero"  ][Number(n)].descript = SurfaceUtil.extend(_descript, descript)
       resolve(@)
 
   loadBalloonSurfaces: ()->
