@@ -87,11 +87,12 @@
             buffer = directory[filepath];
             _descript = SurfaceUtil.parseDescript(SurfaceUtil.convert(buffer));
             ref1 = /balloon([sk])(\d+)s\.txt$/.exec(filepath), __ = ref1[0], type = ref1[1], n = ref1[2];
+            SurfaceUtil.extend(_descript, descript);
             switch (type) {
               case "s":
-                return balloons["sakura"][Number(n)].descript = SurfaceUtil.extend(_descript, descript);
+                return balloons["sakura"][Number(n)].descript = _descript;
               case "k":
-                return balloons["kero"][Number(n)].descript = SurfaceUtil.extend(_descript, descript);
+                return balloons["kero"][Number(n)].descript = _descript;
             }
           });
           return resolve(_this);
@@ -653,21 +654,23 @@
     };
 
     Blimp.prototype.render = function() {
-      var b, balloonId, baseCanvas, h, l, r, ref1, rndr, t, w;
+      var b, balloonId, baseCanvas, descript, h, l, r, ref1, ref2, rndr, t, w;
       balloonId = this.balloonId;
       if (!this.isBalloonLeft) {
         balloonId++;
       }
       baseCanvas = this.balloon.balloons[this.type][balloonId].canvas;
-      this.descript = this.balloon[this.type] != null ? (ref1 = this.balloon.balloons[this.type]) != null ? ref1[balloonId].descript : void 0 : {};
+      this.descript = ((ref1 = this.balloon.balloons[this.type]) != null ? (ref2 = ref1[balloonId]) != null ? ref2.descript : void 0 : void 0) || {};
+      SurfaceUtil.extend(this.descript, this.balloon.descript);
       rndr = new SurfaceRender(this.$blimpCanvas[0]);
       rndr.init(baseCanvas);
       this.$blimp.width(this.width = this.$blimpCanvas[0].width);
       this.$blimp.height(this.height = this.$blimpCanvas[0].height);
-      t = this.descript["origin.y"] || this.descript["validrect.top"] || "10";
-      r = this.descript["validrect.right"] || "10";
-      b = this.descript["validrect.bottom"] || "10";
-      l = this.descript["origin.x"] || this.descript["validrect.left"] || "10";
+      descript = this.descript;
+      t = descript["origin.y"] || descript["validrect.top"] || "10";
+      r = descript["validrect.right"] || "10";
+      b = descript["validrect.bottom"] || "10";
+      l = descript["origin.x"] || descript["validrect.left"] || "10";
       w = this.$blimpCanvas[0].width;
       h = this.$blimpCanvas[0].height;
       this.$blimpText.css({

@@ -48,9 +48,10 @@ class Balloon extends EventEmitter2
         buffer = directory[filepath]
         _descript = SurfaceUtil.parseDescript(SurfaceUtil.convert(buffer))
         [__, type, n] = /balloon([sk])(\d+)s\.txt$/.exec(filepath)
+        SurfaceUtil.extend(_descript, descript)
         switch type
-          when "s" then balloons["sakura"][Number(n)].descript=  SurfaceUtil.extend(_descript, descript)
-          when "k" then balloons["kero"  ][Number(n)].descript = SurfaceUtil.extend(_descript, descript)
+          when "s" then balloons["sakura"][Number(n)].descript = _descript
+          when "k" then balloons["kero"  ][Number(n)].descript = _descript
       resolve(@)
 
   loadBalloonSurfaces: ()->
