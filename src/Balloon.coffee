@@ -107,7 +107,7 @@ class Balloon extends EventEmitter2
     @attachedSurface.push({blimp, element})
     return blimp
 
-  dettatchBlimp: (element)->
+  detachBlimp: (element)->
     hits = @attachedBlimp.filter(({element: _element})=> _element is element)
     return if hits.length is 0
     hits[0].blimp.destructor()

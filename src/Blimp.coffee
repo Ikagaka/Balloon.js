@@ -1,19 +1,17 @@
 {SurfaceRender, SurfaceUtil} = require("ikagaka.shell.js")
 
 class Blimp extends EventEmitter2
-  ### TypeScript Like Member Type
-  element: HTMLDivElement;
-  scopeId: number;
-  balloon: Balloon;
-  ###
 
   constructor: (@element, @scopeId, @balloonId, @balloon)->
     super();
+    @destructors = []
     @type = SurfaceUtil.scope(@scopeId)
     @initDOMStructure()
+    @initEventListener()
     @initStyleFromDescript()
     @isBalloonLeft = true
     @insertPoint = @$blimpText
+    @destructed = false
     @render()
 
   initDOMStructure: ->
@@ -50,6 +48,48 @@ class Blimp extends EventEmitter2
       animation: blink 1s step-end infinite;
     }
     """).appendTo(@$blimp)
+    return
+
+  initEventListener: ->
+    mouselistener = (ev)=>
+      custom =
+        type: ev.type
+        scopeId: @scopeId
+        balloonId: @balloonId
+        event: ev
+      @emit("mouse", custom)
+      @balloon.emit("mouse", custom)
+    @$blimp.on("click", mouselistener)
+    @$blimp.on("dblclick", mouselistener)
+    onchoiceclick = (ev)=>
+      event =
+        type: "choiceselect"
+        id:   ev.target.dataset["id"]
+        args: []
+        text: ev.target.textContent
+      argc = Number ev.target.dataset["argc"]
+      for i in [0 ... argc]
+        event.args.push(ev.target.dataset["argv"+i])
+      @emit("select", event)
+      @balloon.emit("select", event)
+    @$blimp.on("click", ".ikagaka-choice", onchoiceclick)
+    onanchorclick = (ev)=>
+      event =
+        type: "anchorselect"
+        id:   ev.target.dataset["id"]
+        args: []
+        text: ev.target.textContent
+      argc = Number ev.target.dataset["argc"]
+      for i in [0 ... argc]
+        event.args.push(ev.target.dataset["argv"+i])
+      @emit("select", event)
+      @balloon.emit("select", event)
+    @$blimp.on("click", ".ikagaka-anchor", onanchorclick)
+    @destructors.push =>
+      @$blimp.off("click", mouselistener)
+      @$blimp.off("dblclick", mouselistener)
+      @$blimp.off("click", ".ikagaka-choice", onchoiceclick)
+      @$blimp.off("click", ".ikagaka-anchor", onanchorclick)
     return
 
   initStyleFromDescript: ->
@@ -197,8 +237,6 @@ class Blimp extends EventEmitter2
       $imp_position_checker.remove()
     unless xp.relative then offsetx = 0
     unless yp.relative then offsety = 0
-    console.log(yp)
-    console.log(xp)
     $newimp_container_top = $('<div />').addClass("newimp_container_top").css('position': 'absolute', 'pointer-events': 'none', 'top': yp.value)
     $newimp_container = $('<div />').addClass("newimp_container").css('position': 'absolute', 'pointer-events': 'none', 'text-indent': offsetx + 'px', 'top': offsety + 'px', 'width': @$blimpText[0].clientWidth)
     $newimp = $('<span />').css('pointer-events': 'auto', 'margin-left': xp.value)
@@ -207,6 +245,12 @@ class Blimp extends EventEmitter2
     return
 
   destructor: ->
+    @destructor = ()=> console.warn("this blimp was already destructed", this)
+    @destructors.forEach (fn)=> fn()
+    @destructed = true
+    @$blimp.removeClass("blimp")
+    @$blimp.children().remove()
+    @balloon = null
     return
 
   render: ->
@@ -215,7 +259,7 @@ class Blimp extends EventEmitter2
     balloonId++ unless @isBalloonLeft
     baseCanvas = @balloon.balloons[@type][balloonId].canvas;
     rndr = new SurfaceRender(@$blimpCanvas[0])
-    rndr.init(@aseCanvas)
+    rndr.init(baseCanvas)
     # 大きさ調整
     @$blimp.width @$blimpCanvas[0].width
     @$blimp.height @$blimpCanvas[0].height
