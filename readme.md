@@ -46,10 +46,13 @@ NarLoader
 });
 ```
 
+## ChangeLog
+* [release log](https://github.com/Ikagaka/Balloon.js/releases)
+
 ## Development
 
 ```sh
-npm install -g bower dtsm http-server coffeescript browserify
+npm install -g bower dtsm gulp browserify watchify http-server coffee-script
 npm run init
 npm run build
 ```
@@ -104,6 +107,14 @@ interface BalloonSelectEvent extends BalloonEvent {
     style[scoepd]
   ```
 #### isBalloonLeft: boolean
+* 吹き出しがゴーストに向かって左にあるならtrue
+
+#### width: number
+* バルーンの横幅px
+
+#### height: number
+* バルーンの縦幅px
+
 #### render(): void
 * バルーンを再描画します
 

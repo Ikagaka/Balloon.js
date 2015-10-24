@@ -24,9 +24,7 @@
   "dependencies": {
     "ikagaka.shell.js": "ikagaka/Shell.js"
   },
-  "devDependencies": {
-    "watchify": "*"
-  },
+  "devDependencies": {},
   "main": "./lib/index.js",
   "author": "Ikagaka",
   "license": "MIT",
