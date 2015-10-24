@@ -71,19 +71,18 @@ npm run build
 
 #### dettatchSurface(element: HTMLDivElement): void
 #### on(event: string, callback: (event: BalloonEvent)=> void): void
-* on("mouse", cb: (ev: BalloonMouseEvent)=>void): void
-* on("select", cb: (ev: BalloonSelectEvent)=>void): void
+* `on(event: "mouse", callback: (ev: BalloonMouseEvent)=>void): void`
+* `on(event: "select", callback: (ev: BalloonSelectEvent)=>void): void`
 
 ```typescript
 interface BalloonEvent {
   type: string;
   scopeId: number; // \p[n]
-  blimpId: number; // \b[n]
+  balloonId: number; // \b[n]
 }
 
 interface BalloonMouseEvent extends BalloonEvent {
-  type: string; // balloonclick|balloondblclick
-  button: number;
+  type: string; // click|dblclikck
 }
 
 interface BalloonSelectEvent extends BalloonEvent {
@@ -104,12 +103,12 @@ interface BalloonSelectEvent extends BalloonEvent {
     div.blimpText
     style[scoepd]
   ```
-
+#### isBalloonLeft: boolean
 #### render(): void
 * バルーンを再描画します
 
 #### surface(balloonId: number): void
-* `\b[n]`
+* [`\b[n]`](http://ssp.shillest.net/ukadoc/manual/list_sakura_script.html#_b_ID番号_)
 * このメソッドを使ってもバルーンの左右位置は変えられません。
 * `Blimp#left()`, `Blimp#rihgt()`を使ってください。
 
@@ -120,37 +119,37 @@ interface BalloonSelectEvent extends BalloonEvent {
 * バルーンを右向き表示にします
 
 #### anchorBegin(id: string, ...args: string[]): void
-* `\_a[anchorId]`, `\_a[anchorId,...]`
+* [`\_a[anchorId]`, `\_a[anchorId,...]`](http://ssp.shillest.net/ukadoc/manual/list_sakura_script.html#__a_ID_)
 
 #### anchorEnd(): void
-* `\_a`
+* [`\_a`](http://ssp.shillest.net/ukadoc/manual/list_sakura_script.html#__a_ID_)
 
 #### choice(text: string, id: string, ...args: string[]): void
-* `\q[label, choiceId] \q[label, choiceId, ...]`
+* [`\q[label, choiceId] \q[label, choiceId, ...]`](http://ssp.shillest.net/ukadoc/manual/list_sakura_script.html#_q_タイトル,ID_)
 
-#### choiceBegin(id: string, ...args: string): void
-* \__q[choiceId] \__q[choiceId,...]
+#### choiceBegin(id: string, ...args: string)[]: void
+* [`\__q[choiceId] \__q[choiceId,...]`](http://ssp.shillest.net/ukadoc/manual/list_sakura_script.html#___q_ID,..._)
 
 #### choiceEnd(): void
-* \__q
+* [`\__q`](http://ssp.shillest.net/ukadoc/manual/list_sakura_script.html#___q_ID,..._)
 
 #### talk(test: string): void
 * バルーンの現在のカーソル位置に文字を追加します
 
 #### marker(): void
-* `\![*]`
+* [`\![*]`](http://ssp.shillest.net/ukadoc/manual/list_sakura_script.html#_!_*_)
 
 #### clear(): void
-* `\c`
+* [`\c`](http://ssp.shillest.net/ukadoc/manual/list_sakura_script.html#_c)
 
 #### br(ratio: number): void
-* `\n`, `\n[half]`(ratio=0.5), `\n[]`
+* [`\n`, `\n[half]`, `\n[ratio]`](http://ssp.shillest.net/ukadoc/manual/list_sakura_script.html#_n)
 
 #### showWait(): void
-* `\x`
+* [`\x`](http://ssp.shillest.net/ukadoc/manual/list_sakura_script.html#_x)
 
-#### font(name: string, ...values: string): void
-* `\f[]`
+#### font(name: string, ...values: string[]): void
+* [`\f[]`](http://ssp.shillest.net/ukadoc/manual/list_sakura_script.html#_f_cursorstyle,形状_)
 
-#### location( x: number?, y: number? ): void
-* `\_l[x,y]`
+#### location( x: string, y?: string ): void
+* [`\_l[x,y]`](http://ssp.shillest.net/ukadoc/manual/list_sakura_script.html#__l_x,y_)
