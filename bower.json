@@ -1,6 +1,6 @@
 {
   "name": "ikagaka.balloon.js",
-  "version": "3.0.2",
+  "version": "3.0.3",
   "description": "Ukagaka Balloon Surface Renderer for Web Browser",
   "license": "MIT",
   "dependencies": {
