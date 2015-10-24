@@ -1,7 +1,7 @@
 {
   "name": "ikagaka.balloon.js",
-  "version": "2.0.1",
-  "description": "Ukagaka Balloon Surface Renderer",
+  "version": "3.0.0",
+  "description": "Ukagaka Balloon Surface Renderer for Web Browser",
   "url": "https://github.com/ikagaka/Balloon.js",
   "keywords": [
     "nar",
@@ -10,22 +10,28 @@
     "ukagaka"
   ],
   "scripts": {
-    "watch": "coffee -cw ./*.coffee",
-    "build": "coffee -c ./*.coffee"
+    "init": "npm run update; npm run build",
+    "update": "rm -rf bower_components node_modules; npm update; bower update",
+    "clean": "rm lib/*.js dist/*.js",
+    "start": "http-server -o --silent -p 8000 & watchify lib/index.js --standalone Balloon -o dist/Balloon.js -v & coffee -c -w -o lib src/*.coffee",
+    "build": "coffee -c -o lib src/*.coffee; browserify lib/index.js --standalone Balloon -o dist/Balloon.js",
+    "patch": "mversion patch -m; git push origin --tag"
   },
   "repository": {
     "type": "git",
     "url": "https://github.com/ikagaka/Balloon.js"
   },
   "dependencies": {
-    "ikagaka.nar.js": "",
-    "ikagaka.shell.js": "",
-    "zepto": ""
+    "ikagaka.shell.js": "^4.0.7"
   },
   "devDependencies": {
+    "watchify": "*"
   },
-  "main":           "./Balloon.js",
-  "author":         "Ikagaka",
-  "license":        "MIT",
-  "contributors":   ["legokichi", "wiz-stargazer"]
+  "main": "./lib/Balloon.js",
+  "author": "Ikagaka",
+  "license": "MIT",
+  "contributors": [
+    "legokichi",
+    "wiz-stargazer"
+  ]
 }

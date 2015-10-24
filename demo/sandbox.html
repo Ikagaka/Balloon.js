@@ -1,0 +1,54 @@
+<script src="../bower_components/encoding-japanese/encoding.js"></script>
+<script src="../bower_components/jszip/dist/jszip.min.js"></script>
+<script src="../bower_components/eventemitter2/lib/eventemitter2.js"></script>
+<script src="../bower_components/jquery/dist/jquery.min.js"></script>
+<script src="../bower_components/narloader/NarLoader.js"></script>
+<script src="../dist/Balloon.js"></script>
+<script>
+NarLoader
+.loadFromURL("../nar/origin.nar")
+.then(function(nanikaDir){
+  console.log(nanikaDir.files);
+  var balloonDir = nanikaDir.asArrayBuffer();
+  var balloon = new Balloon.Balloon(balloonDir);
+  return balloon.load();
+}).then(function(balloon){
+  console.log(balloon);
+  var div = document.createElement("div");
+  var scopeId = 0;
+  var surfaceId = 0;
+  balloon.attachBlimp(div, scopeId, surfaceId);
+  document.body.appendChild(div);
+}).catch(function(err){
+  console.error(err);
+});
+function talk(blimp){
+  Promise.resolve(blimp)
+  .then(wait(0, function(blimp) { blimp.clear(); }))
+  .then(wait(0, function(blimp) { blimp.clear(); }))
+  .then(wait(0, function(blimp) { blimp.change(0); }))
+  .then(wait(80, function(blimp) { blimp.talk("H"); }))
+  .then(wait(80, function(blimp) { blimp.talk("e"); }))
+  .then(wait(80, function(blimp) { blimp.talk("l"); }))
+  .then(wait(80, function(blimp) { blimp.talk("l"); }))
+  .then(wait(80, function(blimp) { blimp.talk("o"); }))
+  .then(wait(80, function(blimp) { blimp.talk(","); }))
+  .then(wait(80, function(blimp) { blimp.talk("w"); }))
+  .then(wait(80, function(blimp) { blimp.talk("o"); }))
+  .then(wait(80, function(blimp) { blimp.talk("r"); }))
+  .then(wait(80, function(blimp) { blimp.talk("l"); }))
+  .then(wait(80, function(blimp) { blimp.talk("d"); }))
+  .then(wait(80, function(blimp) { blimp.talk("!"); }))
+  .then(wait(0, function(blimp) { blimp.anchorBegin("AnchorID"); }))
+  .then(wait(0, function(blimp) { blimp.talk("anchor"); }))
+  .then(wait(0, function(blimp) { blimp.anchorEnd(); }))
+  .then(wait(0, function(blimp) { blimp.br(); }))
+  .then(wait(0, function(blimp) { blimp.talk("<" + "script>alert(1);<" + "/script>"); }))
+  .then(wait(0, function(blimp) { blimp.br(); }))
+  .then(wait(0, function(blimp) { blimp.choice("choice", "ChoceID"); }))
+  .then(wait(0, function(blimp) { blimp.br(); }))
+  .then(wait(0, function(blimp) { blimp.talk("hi."); }))
+  .then(wait(0, function(blimp) { blimp.showWait(); }))
+  .then(wait(0, function(blimp) { blimp.left(); }))
+}
+</script>
