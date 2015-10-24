@@ -27,7 +27,7 @@
   "devDependencies": {
     "watchify": "*"
   },
-  "main": "./lib/Balloon.js",
+  "main": "./lib/index.js",
   "author": "Ikagaka",
   "license": "MIT",
   "contributors": [
