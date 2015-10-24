@@ -1,0 +1,27 @@
+{
+  "name": "ikagaka.balloon.js",
+  "version": "3.0.0",
+  "description": "Ukagaka Balloon Surface Renderer for Web Browser",
+  "license": "MIT",
+  "dependencies": {
+    "encoding-japanese": "~1.0.23",
+    "text-encoding": "~0.5.3",
+    "jszip": "*",
+    "eventemitter2": "~0.4.14",
+    "jquery": "*"
+  },
+  "devDependencies": {
+    "qunit": "*",
+    "narloader": "*",
+    "qunit-tap": "*",
+    "empower": "*",
+    "power-assert-formatter": "*"
+  },
+  "main": "./dist/Balloon.js",
+  "ignore": [
+    "**/.*",
+    "bower_components",
+    "node_modules",
+    "nar"
+  ]
+}
