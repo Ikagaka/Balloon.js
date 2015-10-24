@@ -22,7 +22,7 @@
     "url": "https://github.com/ikagaka/Balloon.js"
   },
   "dependencies": {
-    "ikagaka.shell.js": "^4.0.7"
+    "ikagaka.shell.js": "ikagaka/Shell.js"
   },
   "devDependencies": {
     "watchify": "*"
