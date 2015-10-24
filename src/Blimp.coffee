@@ -198,9 +198,9 @@ class Blimp extends EventEmitter2
     unless yp.relative then offsety = 0
     console.log(yp)
     console.log(xp)
-    $newimp_container_top = $('<div />').addClass("newimp_container_top").css('position': 'absolute', 'pointer-events': 'none', 'top': yp.value+"px")
+    $newimp_container_top = $('<div />').addClass("newimp_container_top").css('position': 'absolute', 'pointer-events': 'none', 'top': yp.value)
     $newimp_container = $('<div />').addClass("newimp_container").css('position': 'absolute', 'pointer-events': 'none', 'text-indent': offsetx + 'px', 'top': offsety + 'px', 'width': @$blimpText[0].clientWidth)
-    $newimp = $('<span />').css('pointer-events': 'auto', 'margin-left': xp.value+"px")
+    $newimp = $('<span />').css('pointer-events': 'auto', 'margin-left': xp.value)
     @insertPoint = $newimp.appendTo($newimp_container.appendTo($newimp_container_top.appendTo(@$blimpText)))
     @insertPoint.css(@_blimpTextCSS(@_current_text_style))
     return
