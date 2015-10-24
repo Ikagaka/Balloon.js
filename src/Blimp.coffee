@@ -361,7 +361,7 @@ class Blimp extends EventEmitter2
     return
 
   showWait: =>
-    @$blimpText.append("<br /><br />").append("<div class='blink'>▼</div>")
+    @insertPoint.append("<br /><br />").append("<div class='blink'>▼</div>")
     @$blimpText[0].scrollTop = 999
     return
 
