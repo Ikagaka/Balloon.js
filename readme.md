@@ -69,7 +69,7 @@ npm run build
   * 2の時、右側大きなバルーン
   * 3の時、左側大きなバルーン
 
-#### dettatchSurface(element: HTMLDivElement): void
+#### detachSurface(element: HTMLDivElement): void
 #### on(event: string, callback: (event: BalloonEvent)=> void): void
 * `on(event: "mouse", callback: (ev: BalloonMouseEvent)=>void): void`
 * `on(event: "select", callback: (ev: BalloonSelectEvent)=>void): void`
