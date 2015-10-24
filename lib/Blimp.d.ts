@@ -6,10 +6,13 @@ export declare class Blimp extends EventEmitter2 {
   public element: HTMLDivElement;
   public scopeId: number;
   public balloonId: number;
+  public descript: {[key: string]: string};
   public balloon: Balloon;
-  public type: string; // sakura|kero|char0|char1...
+  public type: string; // sakura|kero
   public isBalloonLeft: boolean;
   public destructed: boolean;
+  public width: number;
+  public height: number;
 
   constructor(element: HTMLDivElement, scopeId: number, balloonId: number, balloon: Balloon);
   destructor(): void;
