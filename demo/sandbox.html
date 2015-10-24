@@ -64,7 +64,7 @@ function talk(blimp){
   .then(wait(0, function(blimp) { blimp.right(); }))
   .then(wait(0, function(blimp) { blimp.talk("balloon is right"); }))
   .then(wait(1000, function(blimp) { blimp.br(); }))
-  .then(wait(0, function(blimp) { blimp.location("100", "100"); }))
+  .then(wait(0, function(blimp) { blimp.location(100, 100); }))
   .then(wait(0, function(blimp) { blimp.talk("this text located (100,100)"); }))
   .then(wait(1000, function(blimp) { blimp.br(); }))
   .then(wait(0, function(blimp) { blimp.marker(); }))
