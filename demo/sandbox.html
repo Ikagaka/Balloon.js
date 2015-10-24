@@ -14,11 +14,17 @@ NarLoader
   return balloon.load();
 }).then(function(balloon){
   console.log(balloon);
+  balloon.on("mouse", function(ev){console.log(ev);});
+  balloon.on("select", function(ev){console.log(ev);});
+
   var div = document.createElement("div");
   var scopeId = 0;
   var surfaceId = 0;
   var blimp = balloon.attachBlimp(div, scopeId, surfaceId);
+  console.log(blimp);
+
   document.body.appendChild(div);
+
   talk(blimp);
 }).catch(function(err){
   console.error(err);
