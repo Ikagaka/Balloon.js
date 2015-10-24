@@ -170,7 +170,8 @@ class Blimp extends EventEmitter2
   location: (x, y)->
     re = /^(@)?(-?\d*\.?\d*e?\d*)(em|%)?$/
     toparam = (r) =>
-      unless r? and r.length
+      r = r + ""
+      unless r.length
         return relative: true, value: 0
       rp = r.match(re)
       unless rp then return
@@ -198,9 +199,9 @@ class Blimp extends EventEmitter2
     unless yp.relative then offsety = 0
     console.log(yp)
     console.log(xp)
-    $newimp_container_top = $('<div />').addClass("newimp_container_top").css('position': 'absolute', 'pointer-events': 'none', 'top': yp.value+"px")
+    $newimp_container_top = $('<div />').addClass("newimp_container_top").css('position': 'absolute', 'pointer-events': 'none', 'top': yp.value)
     $newimp_container = $('<div />').addClass("newimp_container").css('position': 'absolute', 'pointer-events': 'none', 'text-indent': offsetx + 'px', 'top': offsety + 'px', 'width': @$blimpText[0].clientWidth)
-    $newimp = $('<span />').css('pointer-events': 'auto', 'margin-left': xp.value+"px")
+    $newimp = $('<span />').css('pointer-events': 'auto', 'margin-left': xp.value)
     @insertPoint = $newimp.appendTo($newimp_container.appendTo($newimp_container_top.appendTo(@$blimpText)))
     @insertPoint.css(@_blimpTextCSS(@_current_text_style))
     return
@@ -360,7 +361,7 @@ class Blimp extends EventEmitter2
     return
 
   showWait: =>
-    @$blimpText.append("<br /><br />").append("<div class='blink'>▼</div>")
+    @insertPoint.append("<br /><br />").append("<div class='blink'>▼</div>")
     @$blimpText[0].scrollTop = 999
     return
 
