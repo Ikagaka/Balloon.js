@@ -4,14 +4,18 @@ class Blimp extends EventEmitter2
 
   constructor: (@element, @scopeId, @balloonId, @balloon)->
     super();
-    @destructors = []
+
     @type = SurfaceUtil.scope(@scopeId)
+    @descript = if @balloon[@type]? then @balloon[@type].descript else null
+    @isBalloonLeft = true
+    @destructed = false
+    @destructors = []
+    @insertPoint = null
+
     @initDOMStructure()
     @initEventListener()
     @initStyleFromDescript()
-    @isBalloonLeft = true
-    @insertPoint = @$blimpText
-    @destructed = false
+
     @render()
 
   initDOMStructure: ->
@@ -48,6 +52,7 @@ class Blimp extends EventEmitter2
       animation: blink 1s step-end infinite;
     }
     """).appendTo(@$blimp)
+    @insertPoint = @$blimpText
     return
 
   initEventListener: ->
@@ -261,8 +266,8 @@ class Blimp extends EventEmitter2
     rndr = new SurfaceRender(@$blimpCanvas[0])
     rndr.init(baseCanvas)
     # 大きさ調整
-    @$blimp.width @$blimpCanvas[0].width
-    @$blimp.height @$blimpCanvas[0].height
+    @$blimp.width(@$blimpCanvas[0].width)
+    @$blimp.height(@$blimpCanvas[0].height)
     # テキスト領域を計算
     descript = @balloon.descript
     t = descript["origin.y"]         or descript["validrect.top"] or "10"
