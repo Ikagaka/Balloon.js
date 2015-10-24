@@ -1,6 +1,6 @@
 {SurfaceRender, SurfaceUtil} = require("ikagaka.shell.js")
 
-class BalloonSurface extends EventEmitter2
+class Blimp extends EventEmitter2
   ### TypeScript Like Member Type
   element: HTMLDivElement;
   scopeId: number;
@@ -14,25 +14,46 @@ class BalloonSurface extends EventEmitter2
     @initStyleFromDescript()
     @isBalloonLeft = true
     @insertPoint = @$blimpText
-    @baseCanvas = @balloon.balloons[@type][@balloonId].canvas
     @render()
 
   initDOMStructure: ->
-    BalloonSurface.prototype.initDOMStructure = ()-> console.warn("initDOMStructure method allows only 1st call")
-    ### Element DOM structure in Jade
-    div.blimp
-      canvas.blimpCanvas
-      div.blimpText
-    ###
+    this.constructor.prototype.initDOMStructure = ()-> console.warn("initDOMStructure method allows only 1st call")
     @$blimp = $(@element).addClass("blimp")
     @$blimpCanvas = $("<canvas width='0' height='0' />").addClass("blimpCanvas")
     @$blimpText = $("<div />").addClass("blimpText")
     @$blimp.append(@$blimpCanvas)
     @$blimp.append(@$blimpText)
+    @$blimp.css
+      position: "absolute"
+      top: "0px"
+      left: "0px"
+      "pointer-events": "auto"
+    @$blimpCanvas.css
+      position: "absolute"
+      top: "0px"
+      left: "0px"
+    @$blimpText.css
+      position: "absolute"
+      top: "0px"
+      left: "0px"
+      "overflow-y": "scroll"
+      "white-space": "pre-wrap"
+      "word-wrap": "break-all"
+    $("<style scoepd />").text("""
+    .blimpText a {
+      cursor: pointer;
+    }
+    @keyframes blink {
+      75% { opacity: 0.0; }
+    }
+    .blimpText .blink {
+      animation: blink 1s step-end infinite;
+    }
+    """).appendTo(@$blimp)
     return
 
   initStyleFromDescript: ->
-    BalloonSurface.prototype.initStyleFromDescript = ()-> console.warn("initStyleFromDescript method allows only 1st call")
+    this.constructor.prototype.initStyleFromDescript = ()-> console.warn("initStyleFromDescript method allows only 1st call")
     descript = @balloon.descript
     @_text_style =
       "cursor":          descript["cursor"] || ''
@@ -175,19 +196,25 @@ class BalloonSurface extends EventEmitter2
       $imp_position_checker.remove()
     unless xp.relative then offsetx = 0
     unless yp.relative then offsety = 0
-    $newimp_container_top = $('<div />').css('position': 'absolute', 'pointer-events': 'none', 'top': yp.value)
-    $newimp_container = $('<div />').css('position': 'absolute', 'pointer-events': 'none', 'text-indent': offsetx + 'px', 'top': offsety + 'px', 'width': @$blimpText[0].clientWidth)
-    $newimp = $('<span />').css('pointer-events': 'auto', 'margin-left': xp.value)
+    console.log(yp)
+    console.log(xp)
+    $newimp_container_top = $('<div />').addClass("newimp_container_top").css('position': 'absolute', 'pointer-events': 'none', 'top': yp.value+"px")
+    $newimp_container = $('<div />').addClass("newimp_container").css('position': 'absolute', 'pointer-events': 'none', 'text-indent': offsetx + 'px', 'top': offsety + 'px', 'width': @$blimpText[0].clientWidth)
+    $newimp = $('<span />').css('pointer-events': 'auto', 'margin-left': xp.value+"px")
     @insertPoint = $newimp.appendTo($newimp_container.appendTo($newimp_container_top.appendTo(@$blimpText)))
     @insertPoint.css(@_blimpTextCSS(@_current_text_style))
+    return
 
   destructor: ->
     return
 
   render: ->
     # canvasに指定の背景画像を描画
+    balloonId = @balloonId
+    balloonId++ unless @isBalloonLeft
+    baseCanvas = @balloon.balloons[@type][balloonId].canvas;
     rndr = new SurfaceRender(@$blimpCanvas[0])
-    rndr.init(@baseCanvas)
+    rndr.init(@aseCanvas)
     # 大きさ調整
     @$blimp.width @$blimpCanvas[0].width
     @$blimp.height @$blimpCanvas[0].height
@@ -208,8 +235,21 @@ class BalloonSurface extends EventEmitter2
     return
 
   left: ()->
+    @isBalloonLeft = true
+    @render()
+
   right: ()->
-    
+    @isBalloonLeft = false
+    @render()
+
+  surface: (balloonId)->
+    # * http://ssp.shillest.net/ukadoc/manual/manual_balloon.html
+    # > 偶数番のIDは左向きのバルーン、奇数番のIDは右向きのバルーンとして、二つセットになる
+    balloonId - balloonId%2
+    balloonId++ unless @isBalloonLeft
+    @balloonId = balloonId
+    @render()
+
   anchorBegin: (id, args...)=>
     @$blimpText.find(".blink").hide()
     @$blimp.show()
@@ -425,4 +465,4 @@ class BalloonSurface extends EventEmitter2
     return
 
 
-exports.BalloonSurface = BalloonSurface
+exports.Blimp = Blimp

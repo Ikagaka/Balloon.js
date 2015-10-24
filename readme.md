@@ -18,6 +18,7 @@ Balloon.js is a `Ukagaka` compatible Balloon Shell renderer for HTML canvas.
 * [jquery/jquery](https://github.com/jquery/jquery)
 
 ## Usage
+
 ```html
 <script src="../bower_components/encoding-japanese/encoding.js"></script>
 <script src="../bower_components/jszip/dist/jszip.min.js"></script>
@@ -46,6 +47,7 @@ NarLoader
 ```
 
 ## Development
+
 ```sh
 npm install -g bower dtsm http-server coffeescript browserify
 npm run init
@@ -66,6 +68,7 @@ npm run build
   * 1の時、右側通常バルーン
   * 2の時、右側大きなバルーン
   * 3の時、左側大きなバルーン
+
 #### dettatchSurface(element: HTMLDivElement): void
 #### on(event: string, callback: (event: BalloonEvent)=> void): void
 * on("mouse", cb: (ev: BalloonMouseEvent)=>void): void
@@ -92,12 +95,23 @@ interface BalloonSelectEvent extends BalloonEvent {
 ```
 
 ### BalloonSurface Class
+#### element: HTMLDivElement
+* attatchSurfaceで指定したDiv要素です。
+* 以下のように要素が追加されます
+  ```jade
+  div.blimp
+    canvas.blimpCanvas
+    div.blimpText
+    style[scoepd]
+  ```
 
 #### render(): void
 * バルーンを再描画します
 
-#### change(balloonId: number): void
+#### surface(balloonId: number): void
 * `\b[n]`
+* このメソッドを使ってもバルーンの左右位置は変えられません。
+* `Blimp#left()`, `Blimp#rihgt()`を使ってください。
 
 #### left(): void
 * バルーンを左向き表示にします

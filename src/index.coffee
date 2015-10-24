@@ -1,5 +1,5 @@
 {Balloon} = require("./Balloon")
-{BalloonSurface} = require("./BalloonSurface")
+{Blimp} = require("./Blimp")
 
 exports.Balloon = Balloon
-exports.BalloonSurface = BalloonSurface
+exports.Blimp = Blimp

@@ -1,5 +1,5 @@
 {SurfaceRender, SurfaceUtil} = require("ikagaka.shell.js")
-{BalloonSurface} = require("./BalloonSurface")
+{Blimp} = require("./Blimp")
 
 class Balloon extends EventEmitter2
 
@@ -103,7 +103,7 @@ class Balloon extends EventEmitter2
     if !@balloons[type][balloonId]?
       console.warn("balloon id:", balloonId, "is not defined")
       return null
-    blimp = new BalloonSurface(element, scopeId, balloonId, this)
+    blimp = new Blimp(element, scopeId, balloonId, this)
     @attachedSurface.push({blimp, element})
     return blimp
 
