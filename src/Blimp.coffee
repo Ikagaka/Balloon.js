@@ -170,7 +170,8 @@ class Blimp extends EventEmitter2
   location: (x, y)->
     re = /^(@)?(-?\d*\.?\d*e?\d*)(em|%)?$/
     toparam = (r) =>
-      unless r? and r.length
+      r = r + ""
+      unless r.length
         return relative: true, value: 0
       rp = r.match(re)
       unless rp then return
