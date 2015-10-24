@@ -24,7 +24,6 @@ class Balloon extends EventEmitter2
     .then(()=> @loadBalloonDescripts()) # 3rd
 
   loadDescript: ()->
-    Balloon.prototype.loadDescript = ()-> console.warn("loadDescript method allows only 1st call")
     dir = this.directory
     getName = (dic, reg)=>
       Object.keys(dic).filter((name)=> reg.test(name))[0] || ""
@@ -37,7 +36,6 @@ class Balloon extends EventEmitter2
     return Promise.resolve(@)
 
   loadBalloonDescripts: ()->
-    Balloon.prototype.loadBalloonDescripts = ()-> console.warn("loadBalloonDescripts method allows only 1st call")
     directory = @directory
     balloons = @balloons
     descript = @descript
@@ -55,7 +53,6 @@ class Balloon extends EventEmitter2
       resolve(@)
 
   loadBalloonSurfaces: ()->
-    Balloon.prototype.loadBalloonSurfaces = ()-> console.warn("loadBalloonSurfaces method allows only 1st call")
     directory = @directory
     balloons = @balloons
     keys = Object.keys(directory)
@@ -100,7 +97,7 @@ class Balloon extends EventEmitter2
     return
 
   attachBlimp: (element, scopeId, balloonId)->
-    type = SurfaceUtil.scope(scopeId)
+    type = if scopeId is 0 then "sakura" else "kero"
     if !@balloons[type][balloonId]?
       console.warn("balloon id:", balloonId, "is not defined")
       return null

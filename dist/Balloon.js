@@ -46,9 +46,6 @@
 
     Balloon.prototype.loadDescript = function() {
       var descript_name, dir, getName;
-      Balloon.prototype.loadDescript = function() {
-        return console.warn("loadDescript method allows only 1st call");
-      };
       dir = this.directory;
       getName = (function(_this) {
         return function(dic, reg) {
@@ -69,9 +66,6 @@
 
     Balloon.prototype.loadBalloonDescripts = function() {
       var balloons, descript, directory;
-      Balloon.prototype.loadBalloonDescripts = function() {
-        return console.warn("loadBalloonDescripts method allows only 1st call");
-      };
       directory = this.directory;
       balloons = this.balloons;
       descript = this.descript;
@@ -102,9 +96,6 @@
 
     Balloon.prototype.loadBalloonSurfaces = function() {
       var balloons, directory, hits, keys, promises;
-      Balloon.prototype.loadBalloonSurfaces = function() {
-        return console.warn("loadBalloonSurfaces method allows only 1st call");
-      };
       directory = this.directory;
       balloons = this.balloons;
       keys = Object.keys(directory);
@@ -200,7 +191,7 @@
 
     Balloon.prototype.attachBlimp = function(element, scopeId, balloonId) {
       var blimp, type;
-      type = SurfaceUtil.scope(scopeId);
+      type = scopeId === 0 ? "sakura" : "kero";
       if (this.balloons[type][balloonId] == null) {
         console.warn("balloon id:", balloonId, "is not defined");
         return null;
@@ -277,7 +268,6 @@
         balloonId++;
       }
       this.descript = ((ref1 = this.balloon.balloons[this.type]) != null ? (ref2 = ref1[balloonId]) != null ? ref2.descript : void 0 : void 0) || {};
-      SurfaceUtil.extend(this.descript, this.balloon.descript);
       this.destructed = false;
       this.destructors = [];
       this.insertPoint = null;
@@ -290,9 +280,6 @@
     }
 
     Blimp.prototype.initDOMStructure = function() {
-      this.constructor.prototype.initDOMStructure = function() {
-        return console.warn("initDOMStructure method allows only 1st call");
-      };
       this.$blimp = $(this.element).addClass("blimp");
       this.$blimpCanvas = $("<canvas width='0' height='0' />").addClass("blimpCanvas");
       this.$blimpText = $("<div />").addClass("blimpText");
@@ -386,9 +373,6 @@
 
     Blimp.prototype.initStyleFromDescript = function() {
       var clickable_element_style, descript;
-      this.constructor.prototype.initStyleFromDescript = function() {
-        return console.warn("initStyleFromDescript method allows only 1st call");
-      };
       descript = this.balloon.descript;
       this._text_style = {
         "cursor": descript["cursor"] || '',
@@ -661,7 +645,6 @@
       }
       baseCanvas = this.balloon.balloons[this.type][balloonId].canvas;
       this.descript = ((ref1 = this.balloon.balloons[this.type]) != null ? (ref2 = ref1[balloonId]) != null ? ref2.descript : void 0 : void 0) || {};
-      SurfaceUtil.extend(this.descript, this.balloon.descript);
       rndr = new SurfaceRender(this.$blimpCanvas[0]);
       rndr.init(baseCanvas);
       this.$blimp.width(this.width = this.$blimpCanvas[0].width);

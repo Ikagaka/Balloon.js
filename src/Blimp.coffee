@@ -24,7 +24,6 @@ class Blimp extends EventEmitter2
     @render()
 
   initDOMStructure: ->
-    this.constructor.prototype.initDOMStructure = ()-> console.warn("initDOMStructure method allows only 1st call")
     @$blimp = $(@element).addClass("blimp")
     @$blimpCanvas = $("<canvas width='0' height='0' />").addClass("blimpCanvas")
     @$blimpText = $("<div />").addClass("blimpText")
@@ -103,7 +102,6 @@ class Blimp extends EventEmitter2
     return
 
   initStyleFromDescript: ->
-    this.constructor.prototype.initStyleFromDescript = ()-> console.warn("initStyleFromDescript method allows only 1st call")
     descript = @balloon.descript
     @_text_style =
       "cursor":          descript["cursor"] || ''
