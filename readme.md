@@ -1,6 +1,6 @@
 # Balloon.js
 
-[![npm](https://img.shields.io/npm/v/ikagaka.balloon.js.svg?style=flat)](https://npmjs.com/package/ikagaka.balloon.js)
+[![npm](https://img.shields.io/npm/v/ikagaka.balloon.js.svg?style=flat)](https://npmjs.com/package/ikagaka.balloon.js) [![bower](https://img.shields.io/bower/v/ikagaka.balloon.js.svg)](http://bower.io/search/?q=ikagaka)
 
 Ukagaka Balloon Surface Renderer for Web Browser
 
