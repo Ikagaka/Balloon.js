@@ -85,7 +85,7 @@ interface BalloonEvent {
 }
 
 interface BalloonMouseEvent extends BalloonEvent {
-  type: string; // click|dblclikck
+  type: string; // click|dblclikck|mousemove|mouseup|mousedown
 }
 
 interface BalloonSelectEvent extends BalloonEvent {

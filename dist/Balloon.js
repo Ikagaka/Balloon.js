@@ -325,6 +325,9 @@
       })(this);
       this.$blimp.on("click", mouselistener);
       this.$blimp.on("dblclick", mouselistener);
+      this.$blimp.on("mousemove", mouselistener);
+      this.$blimp.on("mousedown", mouselistener);
+      this.$blimp.on("mouseup", mouselistener);
       onchoiceclick = (function(_this) {
         return function(ev) {
           var argc, event, i, j, ref1;
@@ -1057,6 +1060,7 @@ var Shell = (function (_EventEmitter2) {
 
         _get(Object.getPrototypeOf(Shell.prototype), "constructor", this).call(this);
         EventEmitter2.call(this);
+        this.descript = {};
         this.directory = directory;
         this.attachedSurface = [];
         this.surfacesTxt = {};
@@ -1073,10 +1077,10 @@ var Shell = (function (_EventEmitter2) {
 
             return Promise.resolve(this).then(function () {
                 return _this.loadDescript();
-            }) // 1st // ←なにこれ（自問自答
+            }) // 1st // ←なにこれ（自問自
             .then(function () {
                 return _this.loadBindGroup();
-            }) // 2nd
+            }) // 2nd // 依存関係的なやつだと思われ
             .then(function () {
                 return _this.loadSurfacesTxt();
             }) // 1st
@@ -1443,6 +1447,8 @@ var Shell = (function (_EventEmitter2) {
                 _this9[key] = new _this9[key].constructor();
             });
         }
+
+        // サーフェスエイリアス込みでサーフェスが存在するか確認
     }, {
         key: "hasSurface",
         value: function hasSurface(scopeId, surfaceId) {
@@ -1553,6 +1559,8 @@ var Surface = (function (_EventEmitter2) {
         this.surfaceId = surfaceId;
         this.shell = shell;
         this.destructed = false;
+        this.width = 0;
+        this.height = 0;
         // private
         this.surfaceResources = shell.surfaceTree[surfaceId];
         this.bufferCanvas = SurfaceUtil.createCanvas();
@@ -1570,7 +1578,7 @@ var Surface = (function (_EventEmitter2) {
         this.render();
     }
 
-    // public methods
+    // Shellから呼ばれるためpublic
 
     _createClass(Surface, [{
         key: "destructor",
@@ -1638,6 +1646,8 @@ var Surface = (function (_EventEmitter2) {
                 this.bufRender.drawRegions(srfNode.collisions);
             }
             this.elmRender.init(this.bufRender.cnv); //バッファから実DOMTree上のcanvasへ描画
+            this.width = this.element.width;
+            this.height = this.element.height;
         }
     }, {
         key: "play",
@@ -2024,11 +2034,10 @@ var Surface = (function (_EventEmitter2) {
             // マウスイベントの共通処理
             // 副作用なし。イベント発火する。
             $(ev.target).css({ "cursor": "default" });
-            if (/^touch/.test(ev.type)) {
-                var changedTouches = ev["changedTouches"]; //そういうプロパティがあるんです（おこ
-                var _changedTouches$0 = changedTouches[0];
-                var pageX = _changedTouches$0.pageX;
-                var pageY = _changedTouches$0.pageY;
+            if (/^touch/.test(ev.type) && ev.originalEvent instanceof TouchEvent) {
+                var _ev$originalEvent$targetTouches$0 = ev.originalEvent.targetTouches[0];
+                var pageX = _ev$originalEvent$targetTouches$0.pageX;
+                var pageY = _ev$originalEvent$targetTouches$0.pageY;
             } else {
                 var pageX = ev.pageX;
                 var pageY = ev.pageY;
@@ -2048,7 +2057,7 @@ var Surface = (function (_EventEmitter2) {
                 "offsetX": offsetX | 0,
                 "offsetY": offsetY | 0,
                 "wheel": 0,
-                "scope": this.scopeId,
+                "scopeId": this.scopeId,
                 "region": hit.name,
                 "button": ev.button === 2 ? 1 : 0,
                 "transparency": !hit.isHit,
@@ -2331,6 +2340,9 @@ exports.isHit = isHit;
 exports.offset = offset;
 exports.createCanvas = createCanvas;
 exports.scope = scope;
+exports.unscope = unscope;
+exports.recursiveElementFromPoint = recursiveElementFromPoint;
+exports.eventPropagationSim = eventPropagationSim;
 exports.randomRange = randomRange;
 
 function extend(target, source) {
@@ -2491,65 +2503,82 @@ function createCanvas() {
     return cnv;
 }
 
+// 0 -> sakura
+
 function scope(scopeId) {
     return scopeId === 0 ? "sakura" : scopeId === 1 ? "kero" : "char" + scopeId;
 }
 
-/*
-var _charId = charId === "sakura" ? 0
-            : charId === "kero"   ? 1
-            : Number(/^char(\d+)/.exec(charId)[1]);
-*/
-/*
-@isHitBubble = (element, pageX, pageY)->
-  $(element).hide()
-  elm = document.elementFromPoint(pageX, pageY)
-  if !elm
-    $(element).show(); return elm
-  unless elm instanceof HTMLCanvasElement
-    $(element).show(); return elm
-  {top, left} = $(elm).offset()
-  if Surface.isHit(elm, pageX-left, pageY-top)
-    $(element).show(); return elm
-  _elm = Surface.isHitBubble(elm, pageX, pageY)
-  $(element).show(); return _elm
-*/
-// ↑この死にコードなんだよ
-/*
-以下Named.jsから呼ばれなくなった死にコード
-export function elementFromPointWithout (element: HTMLElement, pageX: number, pageY: number): Element {
-  var tmp = element.style.display;
-  element.style.display = "none";
-  // elementを非表示にして直下の要素を調べる
-  var elm = document.elementFromPoint(pageX, pageY);
-  // 直下の要素がcanvasなら透明かどうか調べる
-  // todo: cuttlebone管理下の要素かどうかの判定必要
-  if (!elm){
-    element.style.display = tmp;
-    return elm;
-  }
-  if (!(elm instanceof HTMLCanvasElement)) {
-    element.style.display = tmp;
-    return elm;
-  }
-  var {top, left} = offset(elm);
-  // 不透明canvasならヒット
-  if (elm instanceof HTMLCanvasElement && isHit(elm, pageX - left, pageY - top)) {
-    element.style.display = tmp;
-    return elm;
-  }
-  if(elm instanceof HTMLElement){
-    // elementの非表示のままさらに下の要素を調べにいく
-    var _elm = elementFromPointWithout(elm, pageX, pageY)
-    element.style.display = tmp;
-    return _elm;
-  }
-  // 解決できなかった！ザンネン!
-  console.warn(elm);
-  element.style.display = tmp;
-  return null;
+// sakuta -> 0
+
+function unscope(charId) {
+    return charId === "sakura" ? 0 : charId === "kero" ? 1 : Number(/^char(\d+)/.exec(charId)[1]);
 }
-*/
+
+function recursiveElementFromPoint(ev, parent, target) {
+    var clientX = ev.clientX;
+    var clientY = ev.clientY;
+    var pageX = ev.pageX;
+    var pageY = ev.pageY;
+
+    var _$$offset = $(target).offset();
+
+    var left = _$$offset.left;
+    var top = _$$offset.top;
+    var offsetX = pageX - left;
+    var offsetY = pageY - top;
+
+    if ($(parent).find(target).length > 0 && target instanceof HTMLCanvasElement && isHit(target, offsetX, offsetY)) {
+        eventPropagationSim(target, ev);
+        return target;
+    }
+    var tmp = target.style.display;
+    target.style.display = "none";
+    var under = document.elementFromPoint(clientX, clientY);
+    if (under == null) {
+        target.style.display = tmp;
+        return null;
+    }
+    if ($(parent).find(under).length > 0) {
+        var result = recursiveElementFromPoint(ev, parent, under);
+        target.style.display = tmp;
+        return result;
+    }
+    eventPropagationSim(under, ev);
+    target.style.display = tmp;
+    // マウスを停止しているのにここを大量のmousemoveが通過するが
+    // target.style.display = "none"したのち
+    // target.style.display = tmp した瞬間に
+    // mousemoveが発生してしまうためで、それほど大きな問題はないので大丈夫
+    // (モバイルだとマウスないからmousemove発生しないし)
+    return under;
+}
+
+function eventPropagationSim(target, ev) {
+    ev.preventDefault();
+    ev.stopPropagation();
+    if (/^mouse|click$/.test(ev.type)) {
+        var mev = new MouseEvent(ev.type, {
+            screenX: ev.screenX,
+            screenY: ev.screenY,
+            clientX: ev.clientX,
+            clientY: ev.clientY,
+            ctrlKey: ev.ctrlKey,
+            altKey: ev.altKey,
+            shiftKey: ev.shiftKey,
+            metaKey: ev.metaKey,
+            button: ev.button,
+            buttons: ev.originalEvent["buttons"],
+            relatedTarget: ev.relatedTarget,
+            view: ev.originalEvent["view"],
+            detail: ev.originalEvent["detail"],
+            bubbles: true
+        });
+        target.dispatchEvent(mev);
+    } else {
+        console.warn(ev.type, "is not support event");
+    }
+}
 
 function randomRange(min, max) {
     return min + Math.floor(Math.random() * (max - min + 1));

@@ -32,24 +32,5 @@ export declare class Blimp extends EventEmitter2 {
   clear(): void;
   showWait(): void;
   font(name: string, ...values: string[]): void;
-  on(event: string, callback: Function): EventEmitter2;
-  on(event: "mouse", callback: (ev: BalloonMouseEvent)=>any): EventEmitter2;
-  on(event: "select", callback: (ev: BalloonSelectEvent)=>any): EventEmitter2;
-}
 
-export interface BalloonEvent {
-  type: string;
-  scopeId: number; // \p[n]
-  balloonId: number; // \b[n]
-}
-
-export interface BalloonMouseEvent extends BalloonEvent {
-  type: string; // click|dblclikck
-}
-
-export interface BalloonSelectEvent extends BalloonEvent {
-  type: string; // anchorselect|choiceselect
-  id: string;
-  text: string;
-  args: string[]
 }

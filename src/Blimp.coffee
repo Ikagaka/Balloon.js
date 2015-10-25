@@ -70,6 +70,9 @@ class Blimp extends EventEmitter2
       @balloon.emit("mouse", custom)
     @$blimp.on("click", mouselistener)
     @$blimp.on("dblclick", mouselistener)
+    @$blimp.on("mousemove", mouselistener)
+    @$blimp.on("mousedown", mouselistener)
+    @$blimp.on("mouseup", mouselistener)
     onchoiceclick = (ev)=>
       event =
         type: "choiceselect"

@@ -27,4 +27,30 @@ export declare class Balloon extends EventEmitter2 {
   public unload(): void;
   public attachBlimp(element: HTMLDivElement, scopeId: number, balloonId: number): Blimp;
   public detachBlimp(element: HTMLDivElement): void;
+  on(event: string, callback: Function): EventEmitter2;
+  on(event: "mouse", callback: (ev: BalloonMouseEvent)=>any): EventEmitter2;
+  on(event: "select", callback: (ev: BalloonSelectEvent)=>any): EventEmitter2;
+}
+
+export interface BalloonEvent {
+  type: string;
+  scopeId: number; // \p[n]
+  balloonId: number; // \b[n]
+}
+
+export interface BalloonMouseEvent extends BalloonEvent {
+  type: string; // click|dblclikck
+}
+
+export interface BalloonSelectEvent extends BalloonEvent {
+  type: string; // anchorselect|choiceselect
+  id: string;
+  text: string;
+  args: string[];
+}
+
+export interface BalloonInputEvent extends BalloonEvent {
+  type: string; // userinput|communicateinput
+  id: string;
+  content: string;
 }
