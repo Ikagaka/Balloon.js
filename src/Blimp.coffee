@@ -1,10 +1,8 @@
 {SurfaceRender, SurfaceUtil} = require("ikagaka.shell.js")
 
-class Blimp extends EventEmitter2
+class Blimp
 
   constructor: (@element, @scopeId, @balloonId, @balloon)->
-    super();
-
     @type = if @scopeId is 0 then "sakura" else "kero"
     @isBalloonLeft = true
     balloonId = @balloonId
@@ -66,7 +64,6 @@ class Blimp extends EventEmitter2
         scopeId: @scopeId
         balloonId: @balloonId
         event: ev
-      @emit("mouse", custom)
       @balloon.emit("mouse", custom)
     @$blimp.on("click", mouselistener)
     @$blimp.on("dblclick", mouselistener)
@@ -82,7 +79,6 @@ class Blimp extends EventEmitter2
       argc = Number ev.target.dataset["argc"]
       for i in [0 ... argc]
         event.args.push(ev.target.dataset["argv"+i])
-      @emit("select", event)
       @balloon.emit("select", event)
     @$blimp.on("click", ".ikagaka-choice", onchoiceclick)
     onanchorclick = (ev)=>
@@ -94,7 +90,6 @@ class Blimp extends EventEmitter2
       argc = Number ev.target.dataset["argc"]
       for i in [0 ... argc]
         event.args.push(ev.target.dataset["argv"+i])
-      @emit("select", event)
       @balloon.emit("select", event)
     @$blimp.on("click", ".ikagaka-anchor", onanchorclick)
     @destructors.push =>
