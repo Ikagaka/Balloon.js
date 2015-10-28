@@ -2035,9 +2035,9 @@ var Surface = (function (_EventEmitter2) {
             // 副作用なし。イベント発火する。
             $(ev.target).css({ "cursor": "default" });
             if (/^touch/.test(ev.type) && ev.originalEvent instanceof TouchEvent) {
-                var _ev$originalEvent$targetTouches$0 = ev.originalEvent.targetTouches[0];
-                var pageX = _ev$originalEvent$targetTouches$0.pageX;
-                var pageY = _ev$originalEvent$targetTouches$0.pageY;
+                var _ev$originalEvent$changedTouches$0 = ev.originalEvent.changedTouches[0];
+                var pageX = _ev$originalEvent$changedTouches$0.pageX;
+                var pageY = _ev$originalEvent$changedTouches$0.pageY;
             } else {
                 var pageX = ev.pageX;
                 var pageY = ev.pageY;
@@ -2341,6 +2341,7 @@ exports.offset = offset;
 exports.createCanvas = createCanvas;
 exports.scope = scope;
 exports.unscope = unscope;
+exports.getEventPosition = getEventPosition;
 exports.recursiveElementFromPoint = recursiveElementFromPoint;
 exports.eventPropagationSim = eventPropagationSim;
 exports.randomRange = randomRange;
@@ -2423,7 +2424,41 @@ function copy(cnv) {
 }
 
 function fetchPNGUint8ClampedArrayFromArrayBuffer(pngbuf, pnabuf) {
-    return new Promise(function (resolve, reject) {})["catch"](function (err) {
+    return new Promise(function (resolve, reject) {
+        reject("deplicated");
+        /*
+        var reader = new PNGReader(pngbuf);
+        var png = reader.parse();
+        var dataA = png.getUint8ClampedArray();
+        if(typeof pnabuf === "undefined"){
+          var r = dataA[0], g = dataA[1], b = dataA[2], a = dataA[3];
+          var i = 0;
+          if (a !== 0) {
+            while (i < dataA.length) {
+              if (r === dataA[i] && g === dataA[i + 1] && b === dataA[i + 2]) {
+                dataA[i + 3] = 0;
+              }
+              i += 4;
+            }
+          }
+          return resolve(Promise.resolve({width: png.width, height: png.height, data: dataA}));
+        }
+        var pnareader = new PNGReader(pnabuf);
+        var pna = pnareader.parse();
+        var dataB = pna.getUint8ClampedArray();
+        if(dataA.length !== dataB.length){
+          return reject("fetchPNGUint8ClampedArrayFromArrayBuffer TypeError: png" +
+          png.width+"x"+png.height+" and  pna"+pna.width+"x"+pna.height +
+          " do not match both sizes");
+        }
+        var j = 0;
+        while (j < dataA.length) {
+          dataA[j + 3] = dataB[j];
+          j += 4;
+        }
+        return resolve(Promise.resolve({width: png.width, height: png.height, data: dataA}));
+        */
+    })["catch"](function (err) {
         return Promise.reject("fetchPNGUint8ClampedArrayFromArrayBuffer msg:" + err + ", reason: " + err.stack);
     });
 }
@@ -2480,8 +2515,9 @@ function always(callback) {
 }
 
 function isHit(cnv, x, y) {
+    if (!(cnv.width > 0 || cnv.height > 0)) return false;
     var ctx = cnv.getContext("2d");
-    var imgdata = ctx.getImageData(0, 0, x + 1, y + 1);
+    var imgdata = ctx.getImageData(0, 0, x + 1 | 0, y + 1 | 0);
     var data = imgdata.data;
     return data[data.length - 1] !== 0;
 }
@@ -2515,19 +2551,40 @@ function unscope(charId) {
     return charId === "sakura" ? 0 : charId === "kero" ? 1 : Number(/^char(\d+)/.exec(charId)[1]);
 }
 
-function recursiveElementFromPoint(ev, parent, target) {
-    var clientX = ev.clientX;
-    var clientY = ev.clientY;
+function getEventPosition(ev) {
+    if (/^touch/.test(ev.type) && ev.originalEvent.touches.length > 0) {
+        var pageX = ev.originalEvent.touches[0].pageX;
+        var pageY = ev.originalEvent.touches[0].pageY;
+        var clientX = ev.originalEvent.touches[0].clientX;
+        var clientY = ev.originalEvent.touches[0].clientY;
+        var screenX = ev.originalEvent.touches[0].screenX;
+        var screenY = ev.originalEvent.touches[0].screenY;
+        return { pageX: pageX, pageY: pageY, clientX: clientX, clientY: clientY, screenX: screenX, screenY: screenY };
+    }
     var pageX = ev.pageX;
     var pageY = ev.pageY;
+    var clientX = ev.clientX;
+    var clientY = ev.clientY;
+    var screenX = ev.screenX;
+    var screenY = ev.screenY;
+    return { pageX: pageX, pageY: pageY, clientX: clientX, clientY: clientY, screenX: screenX, screenY: screenY };
+}
+
+function recursiveElementFromPoint(ev, parent, target) {
+    var _getEventPosition = getEventPosition(ev);
+
+    var clientX = _getEventPosition.clientX;
+    var clientY = _getEventPosition.clientY;
+    var pageX = _getEventPosition.pageX;
+    var pageY = _getEventPosition.pageY;
 
     var _$$offset = $(target).offset();
 
     var left = _$$offset.left;
     var top = _$$offset.top;
-    var offsetX = pageX - left;
-    var offsetY = pageY - top;
 
+    var offsetX = clientX - (left - window.scrollX); // window.scrollX は position: fixed; でのclientWidthをとるため
+    var offsetY = clientY - (top - window.scrollY);
     if ($(parent).find(target).length > 0 && target instanceof HTMLCanvasElement && isHit(target, offsetX, offsetY)) {
         eventPropagationSim(target, ev);
         return target;
@@ -2575,6 +2632,35 @@ function eventPropagationSim(target, ev) {
             bubbles: true
         });
         target.dispatchEvent(mev);
+    } else if (/^touch/.test(ev.type)) {
+        var ua = window.navigator.userAgent.toLowerCase();
+        if (!(document.createTouch instanceof Function)) return console.warn(ua, "does not support document.createTouch");
+        if (!(document.createTouchList instanceof Function)) return console.warn(ua, "does not support document.createTouchList");
+        if (!(tev["initTouchEvent"] instanceof Function)) return console.warn(ua, "does not support TouchEvent#initTouchEvent");
+
+        var _getEventPosition2 = getEventPosition(ev);
+
+        var pageX = _getEventPosition2.pageX;
+        var pageY = _getEventPosition2.pageY;
+        var clientX = _getEventPosition2.clientX;
+        var clientY = _getEventPosition2.clientY;
+        var screenX = _getEventPosition2.screenX;
+        var screenY = _getEventPosition2.screenY;
+
+        var tev = document.createEvent("TouchEvent");
+        var touch = document.createTouch(document.defaultView, ev.target, 0, pageX, pageY, screenX, screenY);
+        var touches = document.createTouchList(touch);
+        if (ua.indexOf('chrome') != -1 || ua.indexOf('opera') != -1) {
+            console.info("this browser is chrome or opera", ua);
+            tev["initTouchEvent"](touches, touches, touches, ev.type, ev.originalEvent["view"], screenX, screenY, clientX, clientY, ev.ctrlKey, ev.altKey, ev.shiftKey, ev.metaKey);
+        } else if (ua.indexOf('safari') != -1) {
+            console.info("this browser is safari", ua);
+            tev["initTouchEvent"](ev.type, true, ev.cancelable, ev.originalEvent["view"], ev.originalEvent["detail"], screenX, screenY, clientX, clientY, ev.ctrlKey, ev.altKey, ev.shiftKey, ev.metaKey, touches, touches, touches, 0, 0);
+        } else if (ua.indexOf('firefox') != -1 || true) {
+            console.info("this browser is firefox", ua);
+            tev["initTouchEvent"](ev.type, true, ev.cancelable, ev.originalEvent["view"], ev.originalEvent["detail"], ev.ctrlKey, ev.altKey, ev.shiftKey, ev.metaKey, touches, touches, touches);
+        }
+        target.dispatchEvent(tev);
     } else {
         console.warn(ev.type, "is not support event");
     }
