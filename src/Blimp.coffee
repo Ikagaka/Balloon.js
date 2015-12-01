@@ -1,4 +1,5 @@
-{SurfaceRender, SurfaceUtil} = require("ikagaka.shell.js")
+{SurfaceUtil} = require("ikagaka.shell.js")
+$ = require("jquery")
 
 class Blimp
 
@@ -265,8 +266,7 @@ class Blimp
     balloonId++ unless @isBalloonLeft
     baseCanvas = @balloon.balloons[@type][balloonId].canvas
     @descript = @balloon.balloons[@type]?[balloonId]?.descript || {}
-    rndr = new SurfaceRender(@$blimpCanvas[0])
-    rndr.init(baseCanvas)
+    SurfaceUtil.init(@$blimpCanvas[0], @$blimpCanvas[0].getContext("2d"), baseCanvas)
     # 大きさ調整
     @$blimp.width(@width = @$blimpCanvas[0].width)
     @$blimp.height(@height = @$blimpCanvas[0].height)
@@ -516,4 +516,4 @@ class Blimp
     return
 
 
-exports.Blimp = Blimp
+module.exports = Blimp

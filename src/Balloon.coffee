@@ -1,7 +1,8 @@
-{SurfaceRender, SurfaceUtil} = require("ikagaka.shell.js")
-{Blimp} = require("./Blimp")
+{SurfaceUtil} = require("ikagaka.shell.js")
+Blimp = require("./Blimp")
+EventEmitter = require("eventemitter3")
 
-class Balloon extends EventEmitter2
+class Balloon extends EventEmitter
 
   constructor: (@directory)->
     super();
@@ -58,42 +59,32 @@ class Balloon extends EventEmitter2
     keys = Object.keys(directory)
     hits = keys.filter((filepath)-> /[^\/]+\.png$/.test(filepath))
     promises = hits.map (filepath)->
-      new Promise (resolve, reject)->
-        buffer = directory[filepath]
-        url = URL.createObjectURL(new Blob([buffer], {type: "image/png"}))
-        SurfaceUtil.fetchImageFromURL(url)
-        .then((img)->[null, img])
-        .catch((err)-> [err, null])
-        .then ([err, img])->
-          if !!err then return reject(err)
-          URL.revokeObjectURL(url)
-          if !!err then return reject(err)
-          rndr = new SurfaceRender(SurfaceUtil.copy(img))
-          rndr.chromakey()
-          if /^balloon([ksc])(\d+)\.png$/.test(filepath)
-            [__, type, n] = /^balloon([ksc])(\d+)\.png$/.exec(filepath)
-            switch type
-              when "s" then balloons["sakura"     ][Number(n)] = {canvas: rndr.cnv}
-              when "k" then balloons["kero"       ][Number(n)] = {canvas: rndr.cnv}
-              when "c" then balloons["communicate"][Number(n)] = {canvas: rndr.cnv}
-          else if /^online(\d+)\.png$/.test(filepath)
-            [__, n] = /^online(\d+)\.png$/.exec(filepath)
-            balloons["online"][Number(n)] = {canvas: rndr.cnv}
-          else if /^arrow(\d+)\.png$/.test(filepath)
-            [__, n] = /^arrow(\d+)\.png$/.exec(filepath)
-            balloons["arrow"][Number(n)] = {canvas: rndr.cnv}
-          else if /^sstp\.png$/.test(filepath)
-            balloons["sstp"] = {canvas: rndr.cnv}
-          else if /^thumbnail\.png$/.test(filepath)
-            balloons["thumbnail"] = {canvas: rndr.cnv}
-          resolve()
+      buffer = directory[filepath]
+      SurfaceUtil.createSurfaceCanvasFromArrayBuffer(buffer)
+      .then ({img, cnv})->
+        if /^balloon([ksc])(\d+)\.png$/.test(filepath)
+          [__, type, n] = /^balloon([ksc])(\d+)\.png$/.exec(filepath)
+          switch type
+            when "s" then balloons["sakura"     ][Number(n)] = {canvas: cnv}
+            when "k" then balloons["kero"       ][Number(n)] = {canvas: cnv}
+            when "c" then balloons["communicate"][Number(n)] = {canvas: cnv}
+        else if /^online(\d+)\.png$/.test(filepath)
+          [__, n] = /^online(\d+)\.png$/.exec(filepath)
+          balloons["online"][Number(n)] = {canvas: cnv}
+        else if /^arrow(\d+)\.png$/.test(filepath)
+          [__, n] = /^arrow(\d+)\.png$/.exec(filepath)
+          balloons["arrow"][Number(n)] = {canvas: cnv}
+        else if /^sstp\.png$/.test(filepath)
+          balloons["sstp"] = {canvas: cnv}
+        else if /^thumbnail\.png$/.test(filepath)
+          balloons["thumbnail"] = {canvas: cnv}
     return new Promise (resolve, reject)=>
       Promise.all(promises).then => resolve(@)
 
   unload: ->
     @attachedBlimp.forEach ({element, blimp})-> blimp.destructor()
     @removeAllListeners()
-    Object.keys(this).forEach (key)=> @[key] = new @[key].constructor()
+    Object.keys(this).forEach (key)=> @[key] = null
     return
 
   attachBlimp: (element, scopeId, balloonId)->
@@ -113,4 +104,4 @@ class Balloon extends EventEmitter2
     return
 
 
-exports.Balloon = Balloon
+module.exports = Balloon

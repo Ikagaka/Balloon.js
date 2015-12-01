@@ -1,7 +1,5 @@
 <script src="../bower_components/encoding-japanese/encoding.js"></script>
 <script src="../bower_components/jszip/dist/jszip.min.js"></script>
-<script src="../bower_components/eventemitter2/lib/eventemitter2.js"></script>
-<script src="../bower_components/jquery/dist/jquery.min.js"></script>
 <script src="../bower_components/narloader/NarLoader.js"></script>
 <script src="../dist/Balloon.js"></script>
 <script>
@@ -27,7 +25,7 @@ NarLoader
 
   talk(blimp);
 }).catch(function(err){
-  console.error(err);
+  console.error(err, err.stack);
 });
 function talk(blimp){
   Promise.resolve(blimp)
