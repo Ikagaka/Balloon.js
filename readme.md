@@ -10,20 +10,11 @@ Balloon.js is a `Ukagaka` compatible Balloon Shell renderer for HTML canvas.
 * [demo](https://ikagaka.github.io/Balloon.js/demo/playground.html)
 -->
 
-## Dependence
-* [asyncly/EventEmitter2](https://github.com/asyncly/EventEmitter2)
-* [Stuk/jszip](https://github.com/Stuk/jszip)
-* [Ikagaka/NarLoader](https://github.com/Ikagaka/NarLoader/)
-* [polygonplanet/encoding.js](https://github.com/polygonplanet/encoding.js)
-* [jquery/jquery](https://github.com/jquery/jquery)
-
 ## Usage
 
 ```html
 <script src="../bower_components/encoding-japanese/encoding.js"></script>
 <script src="../bower_components/jszip/dist/jszip.min.js"></script>
-<script src="../bower_components/eventemitter2/lib/eventemitter2.js"></script>
-<script src="../bower_components/jquery/dist/jquery.min.js"></script>
 <script src="../bower_components/narloader/NarLoader.js"></script>
 <script src="../dist/Balloon.js"></script>
 <script>

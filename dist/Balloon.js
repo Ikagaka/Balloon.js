@@ -13710,6 +13710,7 @@ var Shell = (function (_EventEmitter) {
             }
             var srf = new _Surface2["default"](canvas, scopeId, _surfaceId, this.surfaceTree);
             srf.enableRegionDraw = this.enableRegion; // 当たり判定表示設定の反映
+            srf.updateBind(this.bindgroup); // 現在の着せ替え設定の反映
             srf.on("mouse", function (ev) {
                 _this9.emit("mouse", ev); // detachSurfaceで消える
             });
@@ -13730,8 +13731,6 @@ var Shell = (function (_EventEmitter) {
     }, {
         key: "unload",
         value: function unload() {
-            var _this10 = this;
-
             this.attachedSurface.forEach(function (_ref3) {
                 var canvas = _ref3.canvas;
                 var surface = _ref3.surface;
@@ -13739,9 +13738,7 @@ var Shell = (function (_EventEmitter) {
                 surface.destructor();
             });
             this.removeAllListeners(null);
-            Object.keys(this).forEach(function (key) {
-                _this10[key] = new _this10[key].constructor();
-            });
+            Shell.call(this, {}); // 初期化
         }
 
         // サーフェスエイリアス込みでサーフェスが存在するか確認
@@ -13765,7 +13762,7 @@ var Shell = (function (_EventEmitter) {
     }, {
         key: "bind",
         value: function bind(scopeId, bindgroupId) {
-            var _this11 = this;
+            var _this10 = this;
 
             if (this.bindgroup[scopeId] == null) {
                 console.warn("Shell#bind > bindgroup", "scopeId:", scopeId, "bindgroupId:", bindgroupId, "is not defined");
@@ -13776,7 +13773,7 @@ var Shell = (function (_EventEmitter) {
                 var srf = _ref4.surface;
                 var canvas = _ref4.canvas;
 
-                srf.updateBind(_this11.bindgroup);
+                srf.updateBind(_this10.bindgroup);
             });
         }
 
@@ -13784,7 +13781,7 @@ var Shell = (function (_EventEmitter) {
     }, {
         key: "unbind",
         value: function unbind(scopeId, bindgroupId) {
-            var _this12 = this;
+            var _this11 = this;
 
             if (this.bindgroup[scopeId] == null) {
                 console.warn("Shell#unbind > bindgroup", "scopeId:", scopeId, "bindgroupId:", bindgroupId, "is not defined");
@@ -13795,7 +13792,7 @@ var Shell = (function (_EventEmitter) {
                 var srf = _ref5.surface;
                 var canvas = _ref5.canvas;
 
-                srf.updateBind(_this12.bindgroup);
+                srf.updateBind(_this11.bindgroup);
             });
         }
 
@@ -14167,6 +14164,7 @@ var Surface = (function (_EventEmitter) {
                 var is = anim.is;
                 var interval = anim.interval;
                 var patterns = anim.patterns;
+                var option = anim.option;
 
                 if (bindgroup[_this5.scopeId] == null) return;
                 if (bindgroup[_this5.scopeId][is] == null) return;
@@ -14177,6 +14175,12 @@ var Surface = (function (_EventEmitter) {
                 } else {
                     //現在の合成レイヤから着せ替えレイヤを削除
                     delete _this5.layers[is];
+                    if (option === "background") {
+                        delete _this5.backgrounds[is];
+                    } else {
+                        delete _this5.layers[is];
+                    }
+                    _this5.render();
                 }
             });
         }
@@ -14755,8 +14759,6 @@ exports.createCanvas = createCanvas;
 exports.scope = scope;
 exports.unscope = unscope;
 exports.getEventPosition = getEventPosition;
-exports.recursiveElementFromPoint = recursiveElementFromPoint;
-exports.eventPropagationSim = eventPropagationSim;
 exports.randomRange = randomRange;
 exports.getRegion = getRegion;
 
@@ -15068,102 +15070,6 @@ function getEventPosition(ev) {
     var screenX = ev.screenX;
     var screenY = ev.screenY;
     return { pageX: pageX, pageY: pageY, clientX: clientX, clientY: clientY, screenX: screenX, screenY: screenY };
-}
-
-function recursiveElementFromPoint(ev, parent, target) {
-    var _getEventPosition = getEventPosition(ev);
-
-    var clientX = _getEventPosition.clientX;
-    var clientY = _getEventPosition.clientY;
-    var pageX = _getEventPosition.pageX;
-    var pageY = _getEventPosition.pageY;
-
-    var _$$offset = $(target).offset();
-
-    var left = _$$offset.left;
-    var top = _$$offset.top;
-
-    var offsetX = clientX - (left - window.scrollX); // window.scrollX は position: fixed; でのclientWidthをとるため
-    var offsetY = clientY - (top - window.scrollY);
-    if ($(parent).find(target).length > 0 && target instanceof HTMLCanvasElement && isHit(target, offsetX, offsetY)) {
-        eventPropagationSim(target, ev);
-        return target;
-    }
-    var tmp = target.style.display;
-    target.style.display = "none";
-    var under = document.elementFromPoint(clientX, clientY);
-    if (under == null) {
-        target.style.display = tmp;
-        return null;
-    }
-    if ($(parent).find(under).length > 0) {
-        var result = recursiveElementFromPoint(ev, parent, under);
-        target.style.display = tmp;
-        return result;
-    }
-    eventPropagationSim(under, ev);
-    target.style.display = tmp;
-    // マウスを停止しているのにここを大量のmousemoveが通過するが
-    // target.style.display = "none"したのち
-    // target.style.display = tmp した瞬間に
-    // mousemoveが発生してしまうためで、それほど大きな問題はないので大丈夫
-    // (モバイルだとマウスないからmousemove発生しないし)
-    return under;
-}
-
-function eventPropagationSim(target, ev) {
-    ev.preventDefault();
-    ev.stopPropagation();
-    if (/^mouse|click$/.test(ev.type)) {
-        var mev = new MouseEvent(ev.type, {
-            screenX: ev.screenX,
-            screenY: ev.screenY,
-            clientX: ev.clientX,
-            clientY: ev.clientY,
-            ctrlKey: ev.ctrlKey,
-            altKey: ev.altKey,
-            shiftKey: ev.shiftKey,
-            metaKey: ev.metaKey,
-            button: ev.button,
-            buttons: ev.originalEvent["buttons"],
-            relatedTarget: ev.relatedTarget,
-            view: ev.originalEvent["view"],
-            detail: ev.originalEvent["detail"],
-            bubbles: true
-        });
-        target.dispatchEvent(mev);
-    } else if (/^touch/.test(ev.type)) {
-        var ua = window.navigator.userAgent.toLowerCase();
-        if (!(document.createTouch instanceof Function)) return console.warn(ua, "does not support document.createTouch");
-        if (!(document.createTouchList instanceof Function)) return console.warn(ua, "does not support document.createTouchList");
-        if (!(tev["initTouchEvent"] instanceof Function)) return console.warn(ua, "does not support TouchEvent#initTouchEvent");
-
-        var _getEventPosition2 = getEventPosition(ev);
-
-        var pageX = _getEventPosition2.pageX;
-        var pageY = _getEventPosition2.pageY;
-        var clientX = _getEventPosition2.clientX;
-        var clientY = _getEventPosition2.clientY;
-        var screenX = _getEventPosition2.screenX;
-        var screenY = _getEventPosition2.screenY;
-
-        var tev = document.createEvent("TouchEvent");
-        var touch = document.createTouch(document.defaultView, ev.target, 0, pageX, pageY, screenX, screenY);
-        var touches = document.createTouchList(touch);
-        if (ua.indexOf('chrome') != -1 || ua.indexOf('opera') != -1) {
-            console.info("this browser is chrome or opera", ua);
-            tev["initTouchEvent"](touches, touches, touches, ev.type, ev.originalEvent["view"], screenX, screenY, clientX, clientY, ev.ctrlKey, ev.altKey, ev.shiftKey, ev.metaKey);
-        } else if (ua.indexOf('safari') != -1) {
-            console.info("this browser is safari", ua);
-            tev["initTouchEvent"](ev.type, true, ev.cancelable, ev.originalEvent["view"], ev.originalEvent["detail"], screenX, screenY, clientX, clientY, ev.ctrlKey, ev.altKey, ev.shiftKey, ev.metaKey, touches, touches, touches, 0, 0);
-        } else if (ua.indexOf('firefox') != -1 || true) {
-            console.info("this browser is firefox", ua);
-            tev["initTouchEvent"](ev.type, true, ev.cancelable, ev.originalEvent["view"], ev.originalEvent["detail"], ev.ctrlKey, ev.altKey, ev.shiftKey, ev.metaKey, touches, touches, touches);
-        }
-        target.dispatchEvent(tev);
-    } else {
-        console.warn(ev.type, "is not support event");
-    }
 }
 
 function randomRange(min, max) {
