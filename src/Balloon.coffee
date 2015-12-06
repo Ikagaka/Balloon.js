@@ -89,7 +89,7 @@ class Balloon extends EventEmitter
 
   attachBlimp: (element, scopeId, balloonId)->
     type = if scopeId is 0 then "sakura" else "kero"
-    if !@balloons[type][balloonId]?
+    if !@balloons[type]?[balloonId]?
       console.warn("balloon id:", balloonId, "is not defined")
       return null
     blimp = new Blimp(element, scopeId, balloonId, this)
