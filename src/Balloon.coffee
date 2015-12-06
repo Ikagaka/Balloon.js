@@ -8,7 +8,7 @@ class Balloon extends EventEmitter
     super();
 
     @descript = {}
-    @attachedSurface = []
+    @attachedBlimp = []
     @balloons =
       "sakura": []
       "kero": []
@@ -93,7 +93,7 @@ class Balloon extends EventEmitter
       console.warn("balloon id:", balloonId, "is not defined")
       return null
     blimp = new Blimp(element, scopeId, balloonId, this)
-    @attachedSurface.push({blimp, element})
+    @attachedBlimp.push({blimp, element})
     return blimp
 
   detachBlimp: (element)->

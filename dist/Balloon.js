@@ -20,7 +20,7 @@
       this.directory = directory1;
       Balloon.__super__.constructor.call(this);
       this.descript = {};
-      this.attachedSurface = [];
+      this.attachedBlimp = [];
       this.balloons = {
         "sakura": [],
         "kero": [],
@@ -180,7 +180,7 @@
         return null;
       }
       blimp = new Blimp(element, scopeId, balloonId, this);
-      this.attachedSurface.push({
+      this.attachedBlimp.push({
         blimp: blimp,
         element: element
       });
