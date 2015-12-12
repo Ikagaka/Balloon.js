@@ -1,6 +1,6 @@
 {
   "name": "ikagaka.balloon.js",
-  "version": "3.1.2",
+  "version": "3.1.3",
   "description": "Ukagaka Balloon Surface Renderer for Web Browser",
   "url": "https://github.com/ikagaka/Balloon.js",
   "keywords": [
@@ -11,12 +11,12 @@
   ],
   "scripts": {
     "init": "npm run update; npm run build",
-    "update": "rm -rf bower_components node_modules; npm update; bower update",
+    "update": "rm -rf bower_components; npm update; bower update",
     "clean": "rm lib/*.js dist/*.js",
     "start": "http-server --silent -p 8000 & watchify lib/index.js --standalone Balloon -o dist/Balloon.js -v & coffee -c -w -o lib src/*.coffee",
     "stop": "killall -- node */http-server -p 8000",
     "build": "coffee -c -o lib src/*.coffee; browserify lib/index.js --standalone Balloon -o dist/Balloon.js",
-    "patch": "mversion patch -m"
+    "patch": "mversion patch"
   },
   "repository": {
     "type": "git",

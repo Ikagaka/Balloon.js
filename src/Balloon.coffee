@@ -1,6 +1,7 @@
 {SurfaceUtil} = require("ikagaka.shell.js")
 Blimp = require("./Blimp")
 EventEmitter = require("eventemitter3")
+$ = require("jquery")
 
 class Balloon extends EventEmitter
 
@@ -47,7 +48,7 @@ class Balloon extends EventEmitter
         buffer = directory[filepath]
         _descript = SurfaceUtil.parseDescript(SurfaceUtil.convert(buffer))
         [__, type, n] = /balloon([sk])(\d+)s\.txt$/.exec(filepath)
-        SurfaceUtil.extend(_descript, descript)
+        $.extend(true, _descript, descript)
         switch type
           when "s" then balloons["sakura"][Number(n)].descript = _descript
           when "k" then balloons["kero"  ][Number(n)].descript = _descript
@@ -60,8 +61,9 @@ class Balloon extends EventEmitter
     hits = keys.filter((filepath)-> /[^\/]+\.png$/.test(filepath))
     promises = hits.map (filepath)->
       buffer = directory[filepath]
-      SurfaceUtil.createSurfaceCanvasFromArrayBuffer(buffer)
-      .then ({img, cnv})->
+      SurfaceUtil.fetchImageFromArrayBuffer(buffer)
+      .then (png)->
+        cnv = SurfaceUtil.pna({cnv: null, png, pna: null}).cnv;
         if /^balloon([ksc])(\d+)\.png$/.test(filepath)
           [__, type, n] = /^balloon([ksc])(\d+)\.png$/.exec(filepath)
           switch type
