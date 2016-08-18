@@ -25121,7 +25121,7 @@ module.exports={
     ]
   },
   "typings": "./lib/index.d.ts",
-  "main": "./lib/index.js",
+  "main": "./es5/index.js",
   "author": "Ikagaka",
   "contributors": [
     "legokichi",
