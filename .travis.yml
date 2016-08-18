@@ -2,7 +2,7 @@ language: node_js
 node_js:
   - 6.3.1
 branches:
-  only: 'typescript'
+  only: '4.x'
 before_install:
 before_script:
 script:
@@ -21,7 +21,20 @@ after_script:
   - git commit -am "travis-auto-update"
   - git status
   - git ls-files
-  - '[ "$TRAVIS_BRANCH" == "typescript" ] && [ $GH_TOKEN ] && git push --force --quiet "https://${GH_TOKEN}@github.com/Ikagaka/Balloon.js.git" gh-pages:gh-pages > /dev/null 2>&1'
+  - '[ "$TRAVIS_BRANCH" == "4.x" ] && [ $GH_TOKEN ] && git push --force --quiet "https://${GH_TOKEN}@github.com/Ikagaka/Balloon.js.git" gh-pages:gh-pages > /dev/null 2>&1'
+  - cd ..
+  - git clone https://github.com/Ikagaka/cuttlebone.git
+  - cd cuttlebone
+  - git checkout dev
+  - ls -la
+  - npm run setup
+  - npm run init
+  - git status
+  - git commit -am "travis-auto-update"
+  - git status
+  - git ls-files
+  - '[ "$TRAVIS_BRANCH" == "5.x" ] && [ $GH_TOKEN ] && git push --quiet "https://${GH_TOKEN}@github.com/Ikagaka/cuttlebone.git" dev:dev > /dev/null 2>&1'
+
 
 env:
   global:

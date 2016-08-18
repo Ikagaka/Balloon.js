@@ -98,7 +98,6 @@ var Balloon = function (_events_1$EventEmitte) {
                     var type = _$exec2[1];
                     var n = _$exec2[2];
 
-                    console.log(balloons, n);
                     $.extend(true, _descript, descript);
                     switch (type) {
                         case "s":
@@ -968,7 +967,10 @@ var _package = require("../package.json");
 exports.version = _package.version;
 exports.Balloon = Balloon_1.default;
 exports.Blimp = BalloonSurface_1.default;
-},{"../package.json":47,"./Balloon":1,"./BalloonSurface":2}],4:[function(require,module,exports){
+var $ = require("jquery");
+window["$"] = window["$"] || $;
+window["jQuery"] = window["jQuery"] || $;
+},{"../package.json":47,"./Balloon":1,"./BalloonSurface":2,"jquery":14}],4:[function(require,module,exports){
 /**
  * Encoding.js
  *
@@ -25063,7 +25065,7 @@ if (typeof exports !== "undefined" && exports !== null) {
 },{"js-yaml":15}],47:[function(require,module,exports){
 module.exports={
   "name": "ikagaka.balloon.js",
-  "version": "3.1.3",
+  "version": "4.0.0",
   "description": "Ukagaka Balloon Surface Renderer for Web Browser",
   "license": "MIT",
   "url": "https://github.com/ikagaka/Balloon.js",

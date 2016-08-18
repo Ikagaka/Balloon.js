@@ -6,3 +6,6 @@ var _package = require("../package.json");
 exports.version = _package.version;
 exports.Balloon = Balloon_1.default;
 exports.Blimp = BalloonSurface_1.default;
+var $ = require("jquery");
+window["$"] = window["$"] || $;
+window["jQuery"] = window["jQuery"] || $;

@@ -97,7 +97,6 @@ var Balloon = function (_events_1$EventEmitte) {
                     var type = _$exec2[1];
                     var n = _$exec2[2];
 
-                    console.log(balloons, n);
                     $.extend(true, _descript, descript);
                     switch (type) {
                         case "s":
