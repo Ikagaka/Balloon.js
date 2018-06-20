@@ -134,7 +134,7 @@ export default class BalloonSurface {
         text: ev.target.textContent
       }
       let argc = Number(dataset["argc"]);
-      for(let i=0; i<=argc; i++){
+      for(let i=0; i<argc; i++){
         event.args.push(dataset["argv"+i]);
       }
       this.balloon.emit("select", event);
@@ -149,7 +149,7 @@ export default class BalloonSurface {
         text: ev.target.textContent
       }
       let argc = Number(dataset["argc"])
-      for(let i=0; i<=argc; i++){
+      for(let i=0; i<argc; i++){
         event.args.push(dataset["argv"+i]);
       }
       this.balloon.emit("select", event);
